@@ -1,5 +1,18 @@
 {
   "resources": [
+    {"id":{"name":"spr_drop_zone","path":"sprites/spr_drop_zone/spr_drop_zone.yy",},"order":1,},
+    {"id":{"name":"fnt_symbols","path":"fonts/fnt_symbols/fnt_symbols.yy",},"order":1,},
+    {"id":{"name":"fnt_card","path":"fonts/fnt_card/fnt_card.yy",},"order":0,},
+    {"id":{"name":"spr_chip_red","path":"sprites/spr_chip_red/spr_chip_red.yy",},"order":2,},
+    {"id":{"name":"Card","path":"scripts/Card/Card.yy",},"order":0,},
+    {"id":{"name":"obj_card","path":"objects/obj_card/obj_card.yy",},"order":0,},
+    {"id":{"name":"obj_drop_zone","path":"objects/obj_drop_zone/obj_drop_zone.yy",},"order":2,},
+    {"id":{"name":"rm_blackjack","path":"rooms/rm_blackjack/rm_blackjack.yy",},"order":1,},
+    {"id":{"name":"obj_chip","path":"objects/obj_chip/obj_chip.yy",},"order":4,},
+    {"id":{"name":"obj_drag_controller","path":"objects/obj_drag_controller/obj_drag_controller.yy",},"order":3,},
+    {"id":{"name":"spr_blackjack_felt","path":"sprites/spr_blackjack_felt/spr_blackjack_felt.yy",},"order":0,},
+    {"id":{"name":"Shoe","path":"scripts/Shoe/Shoe.yy",},"order":1,},
+    {"id":{"name":"obj_blackjack_controller","path":"objects/obj_blackjack_controller/obj_blackjack_controller.yy",},"order":1,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
   ],
   "Options": [
@@ -21,6 +34,7 @@
     "children": [],
   },
   "RoomOrderNodes": [
+    {"roomId":{"name":"rm_blackjack","path":"rooms/rm_blackjack/rm_blackjack.yy",},},
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "Folders": [
@@ -38,6 +52,9 @@
     {"folderPath":"folders/Animation Curves.yy","order":12,"resourceVersion":"1.0","name":"Animation Curves","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Notes.yy","order":13,"resourceVersion":"1.0","name":"Notes","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Extensions.yy","order":14,"resourceVersion":"1.0","name":"Extensions","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Objects/Gambling.yy","order":1,"resourceVersion":"1.0","name":"Gambling","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Scripts/Gambling.yy","order":1,"resourceVersion":"1.0","name":"Gambling","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Sprites/Gambling.yy","order":1,"resourceVersion":"1.0","name":"Gambling","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
