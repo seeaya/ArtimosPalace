@@ -1,10 +1,9 @@
-/// @description Insert description here
-// You can write your code in this editor
+/// @description Draw card
+
+// TODO: Replace drawing with pre-rendered sprites
 
 var card_width = 120;
 var card_height = 160;
-
-
 
 if (face_up) {
 	// Draw front of card
@@ -23,10 +22,10 @@ if (face_up) {
 	draw_set_font(fnt_symbols);
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_left);
+	// Draw suit in top-left corner
 	draw_text(x - card_width / 2, y - card_height / 2, card.suit_text());
-	
+	// Draw suit upside down in bottom-right corner
 	draw_text_transformed(x + card_width / 2, y + card_height / 2, card.suit_text(), 1, 1, 180)
-	
 } else {
 	// Draw back of card
 	draw_set_color(c_blue);

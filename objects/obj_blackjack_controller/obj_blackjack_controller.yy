@@ -23,8 +23,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Gambling",
-    "path": "folders/Objects/Gambling.yy",
+    "name": "Blackjack",
+    "path": "folders/Objects/Gambling/Games/Blackjack.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_blackjack_controller",

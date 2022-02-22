@@ -1,5 +1,7 @@
-/// @description Insert description here
-// You can write your code in this editor
+/// @description Initialize chip
+
+// The value of the chips (note, chips stack)
+value = 0;
 
 drag_sprite = function() {
 	return sprite_index;

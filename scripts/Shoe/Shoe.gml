@@ -1,4 +1,6 @@
+/// @description A shoe containing cards of the given number of decks
 function Shoe(deck_count) constructor {
+	/// @description the cards in the deck
 	cards = ds_list_create();
 	
 	for (var i = 0; i < deck_count; ++i) {
@@ -9,9 +11,11 @@ function Shoe(deck_count) constructor {
 		}
 	}
 	
+	// Automatically shuffle the shoe
 	ds_list_shuffle(cards);
 }
 
+/// @description Creates a new 52-card deck of cards
 function make_deck() {
 	var deck = ds_list_create();
 	

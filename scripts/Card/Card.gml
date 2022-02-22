@@ -1,3 +1,4 @@
+/// @description The suit of a card
 enum suit_type {
 	diamonds,
 	hearts,
@@ -5,6 +6,7 @@ enum suit_type {
 	spades
 }
 
+/// @description The rank of a card. Note: does not consider jokers
 enum rank_type {
 	_2,
 	_3,
@@ -21,6 +23,7 @@ enum rank_type {
 	a
 }
 
+/// @description All possible card suits
 global.all_suits = [
 	suit_type.diamonds, 
 	suit_type.hearts, 
@@ -28,6 +31,7 @@ global.all_suits = [
 	suit_type.spades
 ];
 
+/// @description All possible card ranks
 global.all_ranks = [
 	rank_type._2,
 	rank_type._3,
@@ -44,10 +48,15 @@ global.all_ranks = [
 	rank_type.a
 ]
 
+/// @description A card containing a rank and suit
 function Card(_rank, _suit) constructor {
+	/// @description The rank of the card
 	rank = _rank;
+	
+	/// @description The suit of the card
 	suit = _suit;
 	
+	/// @description The text of the rank of the card
 	rank_text = function() {
 		switch (rank) {
 		case rank_type._2:
@@ -79,6 +88,7 @@ function Card(_rank, _suit) constructor {
 		}
 	}
 	
+	/// @description The text of the suit of the card. Uses unicode characters for the suit
 	suit_text = function() {
 		switch (suit) {
 		case suit_type.diamonds:
@@ -92,6 +102,7 @@ function Card(_rank, _suit) constructor {
 		}
 	}
 	
+	/// @description True if the card is a diamond or heart suit, otherwise false
 	is_red = function() {
 		switch (suit) {
 		case suit_type.diamonds:

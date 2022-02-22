@@ -25,8 +25,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Gambling",
-    "path": "folders/Objects/Gambling.yy",
+    "name": "Dragging",
+    "path": "folders/Objects/Gambling/Dragging.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_drag_controller",

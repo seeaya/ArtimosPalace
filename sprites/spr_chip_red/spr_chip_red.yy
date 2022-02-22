@@ -24,9 +24,9 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"a69cea52-cdda-45d8-9e45-994882015bf6","path":"sprites/spr_chip_red/spr_chip_red.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"a69cea52-cdda-45d8-9e45-994882015bf6","path":"sprites/spr_chip_red/spr_chip_red.yy",},"LayerId":{"name":"d8892070-febb-47eb-b052-410a98f8d825","path":"sprites/spr_chip_red/spr_chip_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"spr_chip_red","path":"sprites/spr_chip_red/spr_chip_red.yy",},"resourceVersion":"1.0","name":"a69cea52-cdda-45d8-9e45-994882015bf6","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"3f6d4b54-daa8-436a-8479-a52a7b591d3f","path":"sprites/spr_chip_red/spr_chip_red.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"3f6d4b54-daa8-436a-8479-a52a7b591d3f","path":"sprites/spr_chip_red/spr_chip_red.yy",},"LayerId":{"name":"26689b9f-96a9-41d6-8d42-11d187c2d69a","path":"sprites/spr_chip_red/spr_chip_red.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"spr_chip_red","path":"sprites/spr_chip_red/spr_chip_red.yy",},"resourceVersion":"1.0","name":"3f6d4b54-daa8-436a-8479-a52a7b591d3f","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
     "spriteId": {"name":"spr_chip_red","path":"sprites/spr_chip_red/spr_chip_red.yy",},
@@ -41,7 +41,7 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"52399e35-a0ed-438d-8f44-42d404c55c08","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"a69cea52-cdda-45d8-9e45-994882015bf6","path":"sprites/spr_chip_red/spr_chip_red.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"61dd1ce1-c587-4213-aafd-47f745cc7f61","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"3f6d4b54-daa8-436a-8479-a52a7b591d3f","path":"sprites/spr_chip_red/spr_chip_red.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -65,12 +65,12 @@
     "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"d8892070-febb-47eb-b052-410a98f8d825","tags":[],"resourceType":"GMImageLayer",},
+    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"26689b9f-96a9-41d6-8d42-11d187c2d69a","tags":[],"resourceType":"GMImageLayer",},
   ],
   "nineSlice": null,
   "parent": {
-    "name": "Gambling",
-    "path": "folders/Sprites/Gambling.yy",
+    "name": "Chips",
+    "path": "folders/Sprites/Gambling/Chips.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_chip_red",
