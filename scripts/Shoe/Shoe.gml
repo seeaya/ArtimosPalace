@@ -19,9 +19,9 @@ function Shoe(deck_count) constructor {
 function make_deck() {
 	var deck = ds_list_create();
 	
-	for (var s = 0; s < array_length(global.all_suits); ++s) {
-		for (var r = 0; r < array_length(global.all_ranks); ++r) {
-			ds_list_add(deck, new Card(global.all_ranks[r], global.all_suits[s]));
+	for (var s = 0; s < ds_list_size(global.all_suits); ++s) {
+		for (var r = 0; r < ds_list_size(global.all_ranks); ++r) {
+			ds_list_add(deck, new Card(global.all_ranks[| r], global.all_suits[| s]));
 		}
 	}
 	

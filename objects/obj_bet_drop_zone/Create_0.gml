@@ -15,8 +15,9 @@ accept_drop = function(item) {
 		break;
 	case obj_chip:
 		// Dragging from other bet, add other bet to this bet, set other bet to zero (a move).
-		chip.value += item.value;
+		var value = item.value;
 		item.value = 0;
+		chip.value += value;
 		break;
 	}
 	

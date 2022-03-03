@@ -24,15 +24,15 @@ enum rank_type {
 }
 
 /// @description All possible card suits
-global.all_suits = [
+global.all_suits = array_to_list([
 	suit_type.diamonds, 
 	suit_type.hearts, 
 	suit_type.clubs, 
 	suit_type.spades
-];
+]);
 
 /// @description All possible card ranks
-global.all_ranks = [
+global.all_ranks = array_to_list([
 	rank_type._2,
 	rank_type._3,
 	rank_type._4,
@@ -46,7 +46,7 @@ global.all_ranks = [
 	rank_type.q,
 	rank_type.k,
 	rank_type.a
-]
+])
 
 /// @description A card containing a rank and suit
 function Card(_rank, _suit) constructor {
@@ -111,6 +111,128 @@ function Card(_rank, _suit) constructor {
 		case suit_type.spades:
 		case suit_type.clubs:
 			return false;
+		}
+	}
+}
+
+/// @description The sprite of the given card
+function sprite_for_card(card) {
+	switch (card.suit) {
+	case suit_type.diamonds:
+		switch (card.rank) {
+		case rank_type.a:
+			return spr_card_ace_diamonds;
+		case rank_type._2:
+			return spr_card_2_diamonds;
+		case rank_type._3:
+			return spr_card_3_diamonds;
+		case rank_type._4:
+			return spr_card_4_diamonds;
+		case rank_type._5:
+			return spr_card_5_diamonds;
+		case rank_type._6:
+			return spr_card_6_diamonds;
+		case rank_type._7:
+			return spr_card_7_diamonds;
+		case rank_type._8:
+			return spr_card_8_diamonds;
+		case rank_type._9:
+			return spr_card_9_diamonds;
+		case rank_type._10:
+			return spr_card_10_diamonds;
+		case rank_type.j:
+			return spr_card_jack_diamonds;
+		case rank_type.q:
+			return spr_card_queen_diamonds;
+		case rank_type.k:
+			return spr_card_king_diamonds;
+		}
+	case suit_type.hearts:
+		switch (card.rank) {
+		case rank_type.a:
+			return spr_card_ace_hearts;
+		case rank_type._2:
+			return spr_card_2_hearts;
+		case rank_type._3:
+			return spr_card_3_hearts;
+		case rank_type._4:
+			return spr_card_4_hearts;
+		case rank_type._5:
+			return spr_card_5_hearts;
+		case rank_type._6:
+			return spr_card_6_hearts;
+		case rank_type._7:
+			return spr_card_7_hearts;
+		case rank_type._8:
+			return spr_card_8_hearts;
+		case rank_type._9:
+			return spr_card_9_hearts;
+		case rank_type._10:
+			return spr_card_10_hearts;
+		case rank_type.j:
+			return spr_card_jack_hearts;
+		case rank_type.q:
+			return spr_card_queen_hearts;
+		case rank_type.k:
+			return spr_card_king_hearts;
+		}
+	case suit_type.clubs:
+		switch (card.rank) {
+		case rank_type.a:
+			return spr_card_ace_clubs;
+		case rank_type._2:
+			return spr_card_2_clubs;
+		case rank_type._3:
+			return spr_card_3_clubs;
+		case rank_type._4:
+			return spr_card_4_clubs;
+		case rank_type._5:
+			return spr_card_5_clubs;
+		case rank_type._6:
+			return spr_card_6_clubs;
+		case rank_type._7:
+			return spr_card_7_clubs;
+		case rank_type._8:
+			return spr_card_8_clubs;
+		case rank_type._9:
+			return spr_card_9_clubs;
+		case rank_type._10:
+			return spr_card_10_clubs;
+		case rank_type.j:
+			return spr_card_jack_clubs;
+		case rank_type.q:
+			return spr_card_queen_clubs;
+		case rank_type.k:
+			return spr_card_king_clubs;
+		}
+	case suit_type.spades:
+		switch (card.rank) {
+		case rank_type.a:
+			return spr_card_ace_spades;
+		case rank_type._2:
+			return spr_card_2_spades;
+		case rank_type._3:
+			return spr_card_3_spades;
+		case rank_type._4:
+			return spr_card_4_spades;
+		case rank_type._5:
+			return spr_card_5_spades;
+		case rank_type._6:
+			return spr_card_6_spades;
+		case rank_type._7:
+			return spr_card_7_spades;
+		case rank_type._8:
+			return spr_card_8_spades;
+		case rank_type._9:
+			return spr_card_9_spades;
+		case rank_type._10:
+			return spr_card_10_spades;
+		case rank_type.j:
+			return spr_card_jack_spades;
+		case rank_type.q:
+			return spr_card_queen_spades;
+		case rank_type.k:
+			return spr_card_king_spades;
 		}
 	}
 }

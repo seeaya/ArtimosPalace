@@ -3,8 +3,8 @@
 // Check if drop is in rectangle zone
 var left_x = x - sprite_width / 2;
 var right_x = x + sprite_width / 2;
-var top_y = y - sprite_width / 2;
-var bottom_y = y + sprite_width / 2;
+var top_y = y - sprite_height / 2;
+var bottom_y = y + sprite_height / 2;
 
 var in_bounds = point_in_rectangle(mouse_x, mouse_y, left_x, top_y, right_x, bottom_y);
 
