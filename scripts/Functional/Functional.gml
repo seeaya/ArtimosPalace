@@ -25,6 +25,15 @@ function list_compact_map(list, map) {
 	return mapped;
 }
 
+/// @description Runs the given closure on each of the list's elements.
+function list_for_each(list, closure) {
+	var list_size = ds_list_size(list);
+	
+	for (var i = 0; i < list_size; ++i) {
+		closure(list[| i]);
+	}
+}
+
 /// @description Returns a list containing only the elements in the given list that satisfy the given predicate.
 function list_filter(list, predicate) {
 	var filtered = ds_list_create();
@@ -73,4 +82,20 @@ function list_max(list, isLessThan) {
 	}
 	
 	return maximum;
+}
+
+function list_first(list) {
+	if (ds_list_size(list) == 0) {
+		return undefined;
+	}
+	
+	return list[| 0];
+}
+
+function list_last(list) {
+	if (ds_list_size(list) == 0) {
+		return undefined;
+	}
+	
+	return list[| ds_list_size(list) - 1];
 }

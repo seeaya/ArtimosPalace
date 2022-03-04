@@ -4,8 +4,8 @@
 var dist = point_distance(x, y, mouse_x, mouse_y);
 var radius = sprite_get_height(sprite_index) / 2;
 
-// Check for pressing inside drag radius
-if (mouse_check_button_pressed(mb_left) && dist <= radius) {
+// Check for pressing inside drag radius (don't allow drag for value of zero)
+if (mouse_check_button_pressed(mb_left) && dist <= radius && value > 0) {
 	obj_drag_controller.begin_drag_of_item(self);
 }
 

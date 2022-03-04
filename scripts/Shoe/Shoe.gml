@@ -6,13 +6,21 @@ function Shoe(deck_count) constructor {
 	for (var i = 0; i < deck_count; ++i) {
 		var deck = make_deck();
 		
-		for (var i = 0; i < ds_list_size(deck); ++i) {
-			ds_list_add(cards, deck[| i]);
+		for (var j = 0; j < ds_list_size(deck); ++j) {
+			ds_list_add(cards, deck[| j]);
 		}
+		
+		ds_list_destroy(deck);
 	}
 	
 	// Automatically shuffle the shoe
 	ds_list_shuffle(cards);
+	
+	next_card = function() {
+		var card = cards[| ds_list_size(cards) - 1];
+		ds_list_delete(cards, ds_list_size(cards) - 1);
+		return card;
+	}
 }
 
 /// @description Creates a new 52-card deck of cards
