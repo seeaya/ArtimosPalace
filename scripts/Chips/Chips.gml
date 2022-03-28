@@ -92,3 +92,26 @@ function label_color_for_chip_sprite(sprite) {
 		return make_color_rgb(0, 77, 129);
 	}
 }
+
+function chip_move_from_drop_zone(drop_zone, x, y) {
+	var chip_source = drop_zone.chip;
+	var chip = instance_create_layer(chip_source.x, chip_source.y, "Instances", obj_chip);
+	chip.depth = chip_source.depth;
+	chip.image_xscale = chip_source.image_xscale;
+	chip.image_yscale = chip_source.image_yscale;
+	chip.value = chip_source.value;
+	chip.draggable = false;
+	
+	chip_source.value = 0;
+	
+	var path = path_add();
+	path_add_point(path, chip.x, chip.y, 1);
+	path_add_point(path, x, y, 1);
+	path_set_closed(path, false);
+	
+	with (chip) {
+		path_start(path, 1536, path_action_stop, true);
+	}
+	
+	return chip;
+}

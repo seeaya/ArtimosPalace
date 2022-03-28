@@ -3,17 +3,24 @@
 // Shoe contains cards to be dealt. Many numbers of decks are common, but six is most common and compatible with size-bets
 shoe = new Shoe(6);
 
+stage = bj_game_stage_type.betting;
+
 // Blackjack requires dragging, so create drag controller
 instance_create_layer(0, 0, "Instances", obj_drag_controller);
 
-is_betting = true;
 play_index = 0;
+split_index = 0;
 
 cards_left = ds_list_create();
 cards_center = ds_list_create();
 cards_right = ds_list_create();
 cards_dealer = ds_list_create();
 
+betting_insurance = array_to_list([false, false, false]);
+
+chips_taken = ds_list_create();
+
+// Card lists
 cards_left_values = function() {
 	return list_map(cards_left, function(card) {
 		return card.card;
@@ -38,13 +45,31 @@ cards_dealer_values = function() {
 	})
 }
 
+last_card = function() {
+	switch (play_index) {
+	case 0:
+		return list_last(cards_left);
+	case 1:
+		return list_last(cards_center);
+	case 2:
+		return list_last(cards_right);
+	default:
+		return list_last(cards_dealer);
+	}
+}
+
+// Game transition functions
 begin_betting = function() {
-	is_betting = true;
+	stage = bj_game_stage_type.betting;
 	game_button_top_left.text = "Repeat";
 	game_button_bottom_left.text = "Double";
 	game_button_top_right.text = "";
-	game_button_top_right.is_enabled = false;
 	game_button_bottom_right.text = "Play";
+	
+	game_button_top_left.is_enabled = true;
+	game_button_bottom_left.is_enabled = true;
+	game_button_top_right.is_enabled = false;
+	game_button_bottom_right.is_enabled = true;
 	
 	if (ds_list_size(shoe.cards) <= 52) {
 		delete shoe;
@@ -82,15 +107,7 @@ begin_betting = function() {
 	hand_value_label_dealer.visible = false;
 }
 
-begin_game = function() {
-	is_betting = false;
-	play_index = 0;
-	game_button_top_left.text = "Double Down";
-	game_button_bottom_left.text = "Split";
-	game_button_top_right.text = "Hit";
-	game_button_top_right.is_enabled = true;
-	game_button_bottom_right.text = "Stand";
-	
+game_begin = function() {
 	var second_card_left = instance_create_layer(first_card_left.x + 48, first_card_left.y - 16, "Instances", obj_card);
 	var second_card_center = instance_create_layer(first_card_center.x + 48, first_card_center.y - 16, "Instances", obj_card);
 	var second_card_right = instance_create_layer(first_card_right.x + 48, first_card_right.y - 16, "Instances", obj_card);
@@ -125,6 +142,146 @@ begin_game = function() {
 	hand_value_label_center.visible = true;
 	hand_value_label_right.visible = true;
 	hand_value_label_dealer.visible = true;
+	
+	update_card_info();
+	
+	if (list_first(cards_dealer_values()).rank == rank_type.a) {
+		// Up card is ace, begin insurance
+		insurance_begin();
+	} else {
+		// Otherwise, continue on with game (paying out blackjacks is next)
+		payout_blackjacks();
+	}
+}
+
+insurance_begin = function() {
+	stage = bj_game_stage_type.insurance_betting
+	play_index = 0;
+	
+	game_button_top_left.text = "";
+	game_button_bottom_left.text = "";
+	game_button_top_right.text = "Insurance";
+	game_button_bottom_right.text = "No Insurance";
+	
+	game_button_top_left.is_enabled = false;
+	game_button_bottom_left.is_enabled = false;
+	game_button_top_right.is_enabled = true;
+	game_button_bottom_right.is_enabled = true;
+	
+	betting_insurance = array_to_list([false, false, false]);
+}
+
+insurance_check_cards = function() {
+	stage = bj_game_stage_type.insurance_check;
+	
+	game_button_top_right.is_enabled = false;
+	game_button_bottom_right.is_enabled = false;
+	
+	if (bj_is_blackjack(cards_dealer_values())) {
+		cards_dealer[| 1].face_up = true;
+	}
+	
+	alarm[0] = room_speed * 2;
+}
+
+insurance_end = function() {
+	stage = bj_game_stage_type.insurance_payout;
+	alarm[2] = room_speed * 2;
+}
+
+payout_blackjacks = function() {
+	stage = bj_game_stage_type.blackjack_payout;
+	play_index = 0;
+	game_button_top_left.text = "Double Down";
+	game_button_bottom_left.text = "Split";
+	game_button_top_right.text = "Hit";
+	game_button_bottom_right.text = "Stand";
+	
+	game_button_top_left.is_enabled = false;
+	game_button_bottom_left.is_enabled = false;
+	game_button_top_right.is_enabled = false;
+	game_button_bottom_right.is_enabled = false;
+	
+	var had_blackjack = false;
+	
+	if (bj_is_blackjack(cards_dealer_values())) {
+		// Show dealer's down card
+		cards_dealer_values()[| 1].face_up = true;
+		had_blackjack = true;
+		
+		if (bj_is_blackjack(cards_left_values())) {
+			// Left player pushes
+			
+		} else {
+			// Left player loses
+			
+		}
+		
+		if (bj_is_blackjack(cards_center_values())) {
+			// Center player pushes
+		} else {
+			// Center player loses
+		}
+		
+		if (bj_is_blackjack(cards_right_values())) {
+			// Right player pushes
+		} else {
+			// Right player loses
+		}
+	} else {
+		if (bj_is_blackjack(cards_left_values())) {
+			var chip = chip_move_from_drop_zone(main_drop_zone_left, room_width / 2, room_height + sprite_get_height(spr_chip_white) / 2);
+			ds_list_add(chips_taken, chip);
+			
+			had_blackjack = true;
+		}
+		
+		if (bj_is_blackjack(cards_center_values())) {
+			var chip = chip_move_from_drop_zone(main_drop_zone_center, room_width / 2, room_height + sprite_get_height(spr_chip_white) / 2);
+			ds_list_add(chips_taken, chip);
+			
+			had_blackjack = true;
+		}
+		
+		if (bj_is_blackjack(cards_right_values())) {
+			var chip = chip_move_from_drop_zone(main_drop_zone_right, room_width / 2, room_height + sprite_get_height(spr_chip_white) / 2);
+			ds_list_add(chips_taken, chip);
+			
+			had_blackjack = true;
+		}
+	}
+	
+	if (had_blackjack) {
+		// Wait two seconds to pay out blackjacks
+		alarm[1] = room_speed * 2;
+	} else {
+		if (bj_is_blackjack(cards_dealer_values())) {
+			// Dealer had blackjack, no more actions, start new round of betting
+			begin_betting();
+		} else {
+			// Dealer didn't have blackjack, continue to play
+			play_begin();
+		}
+	}
+}
+
+play_begin = function() {
+	stage = bj_game_stage_type.player_turn;
+	
+	// Can always stand
+	game_button_bottom_right.is_enabled = true;
+}
+
+// UI Functions
+update_card_info = function() {
+	hand_value_label_left.text = value_label(cards_left_values());
+	hand_value_label_center.text = value_label(cards_center_values());
+	hand_value_label_right.text = value_label(cards_right_values());
+	hand_value_label_dealer.text = value_label(cards_dealer_values());
+	
+	hand_value_label_left.is_enabled = play_index == 0;
+	hand_value_label_center.is_enabled = play_index == 1;
+	hand_value_label_right.is_enabled = play_index == 2;
 }
 
 // Drop zone interface items
@@ -167,42 +324,55 @@ first_card_right.visible = false;
 first_card_dealer.visible = false;
 
 game_button_top_left.action = function() {
-	if (is_betting) {
-		// Repeat
-	} else {
-		// Double Down
+	switch (stage) {
+	case bj_game_stage_type.betting:
+		// Repeat bet
+		break;
+	case bj_game_stage_type.insurance_betting:
+		break;
+	case bj_game_stage_type.player_turn:
+		// Double down
+		break;
+	default:
+		break;
 	}
 }
 
 game_button_bottom_left.action = function() {
-	if (is_betting) {
-		// Double
-	} else {
+	switch (stage) {
+	case bj_game_stage_type.betting:
+		// Double bet
+		break;
+	case bj_game_stage_type.insurance_betting:
+		break;
+	case bj_game_stage_type.player_turn:
 		// Split
+		break;
+	default:
+		break;
 	}
 }
 
 game_button_top_right.action = function() {
-	if (is_betting) {
+	switch (stage) {
+	case bj_game_stage_type.betting:
 		// Nothing
-	} else {
-		// Hit
-		var last_card;
-		
-		switch (play_index) {
-		case 0:
-			last_card = list_last(cards_left);
-			break;
-		case 1:
-			last_card = list_last(cards_center);
-			break;
-		case 2:
-			last_card = list_last(cards_right);
-			break;
+		break;
+	case bj_game_stage_type.insurance_betting:
+		// Bet on insurance
+		betting_insurance[| play_index] = true;
+		if (play_index == 2) {
+			// Done with insurence bets, check dealer's cards next
+			insurance_check_cards();
+		} else {
+			// No insurance, have next slot bet
+			play_index += 1;
 		}
-		
-		var next_card = instance_create_layer(last_card.x + 48, last_card.y - 16, "Instances", obj_card);
-		next_card.depth = last_card.depth - 1;
+		break;
+	case bj_game_stage_type.player_turn:
+		// Hit
+		var next_card = instance_create_layer(last_card().x + 48, last_card().y - 16, "Instances", obj_card);
+		next_card.depth = last_card().depth - 1;
 		next_card.card = shoe.next_card();
 		
 		switch (play_index) {
@@ -216,22 +386,41 @@ game_button_top_right.action = function() {
 			ds_list_add(cards_right, next_card);
 			break
 		}
+		break;
+	default:
+		break;
 	}
 }
 
 game_button_bottom_right.action = function() {
-	if (is_betting) {
+	switch (stage) {
+	case bj_game_stage_type.betting:
 		// Play
-		begin_game();
-	} else {
+		game_begin();
+		break;
+	case bj_game_stage_type.insurance_betting:
+		// No insurance
+		if (play_index == 2) {
+			// Done with insurence bets, check dealer's cards next
+			insurance_check_cards();
+		} else {
+			// No insurance, have next slot bet
+			play_index += 1;
+		}
+		break;
+	case bj_game_stage_type.player_turn:
 		// Stand
 		if (play_index == 2) {
+			// TODO: Play dealer's hand
 			// TODO: Collect bets and award winnings
 			begin_betting();
 		} else {
 			// Stand, have next slot bet
 			play_index += 1;
 		}
+		break;
+	default:
+		break;
 	}
 }
 

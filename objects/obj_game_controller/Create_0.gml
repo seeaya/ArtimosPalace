@@ -4,5 +4,7 @@
 /// @description The player's current balance
 global.balance = 500;
 
+randomize();
+
 // TODO: Add a main menu room
 room_goto(rm_blackjack);

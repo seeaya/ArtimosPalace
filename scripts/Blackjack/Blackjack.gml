@@ -1,3 +1,16 @@
+enum bj_game_stage_type {
+	betting,
+	plus_three_payout,
+	perfect_pair_payout,
+	insurance_betting,
+	insurance_check,
+	insurance_payout,
+	blackjack_payout,
+	player_turn,
+	dealer_turn,
+	payout,
+}
+
 /// @description
 function bj_card_value(card) {
 	switch (card.rank) {
