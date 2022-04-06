@@ -22,6 +22,7 @@
     {"id":{"name":"spr_card_5_hearts","path":"sprites/spr_card_5_hearts/spr_card_5_hearts.yy",},"order":18,},
     {"id":{"name":"spr_chip_pink_unlabeled","path":"sprites/spr_chip_pink_unlabeled/spr_chip_pink_unlabeled.yy",},"order":15,},
     {"id":{"name":"spr_chip_orange_unlabeled","path":"sprites/spr_chip_orange_unlabeled/spr_chip_orange_unlabeled.yy",},"order":14,},
+    {"id":{"name":"fnt_score","path":"fonts/fnt_score/fnt_score.yy",},"order":6,},
     {"id":{"name":"spr_card_queen_hearts","path":"sprites/spr_card_queen_hearts/spr_card_queen_hearts.yy",},"order":51,},
     {"id":{"name":"spr_card_5_spades","path":"sprites/spr_card_5_spades/spr_card_5_spades.yy",},"order":19,},
     {"id":{"name":"spr_button_round_rect_disabled","path":"sprites/spr_button_round_rect_disabled/spr_button_round_rect_disabled.yy",},"order":4,},

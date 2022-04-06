@@ -4,6 +4,10 @@ event_inherited();
 
 // Accept drop if drag item is an obj_chip_store (from dragging from store) or an obj_chip (if dragging from other bet zone)
 should_accept_drop = function(item) {
+	if (!is_enabled) {
+		return false;
+	}
+	
 	return item.object_index == obj_chip_store || item.object_index == obj_chip;
 }
 

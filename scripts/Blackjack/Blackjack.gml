@@ -11,6 +11,12 @@ enum bj_game_stage_type {
 	payout,
 }
 
+enum bj_win_type {
+	player,
+	dealer,
+	push,
+}
+
 /// @description
 function bj_card_value(card) {
 	switch (card.rank) {
@@ -95,4 +101,27 @@ function bj_is_bust(cards) {
 	}
 	
 	return values[| 0] > 21;
+}
+
+function bj_compare_hands(player_cards, dealer_cards) {
+	if (bj_is_bust(player_cards)) {
+		return bj_win_type.dealer;
+	}
+	
+	if (bj_is_bust(dealer_cards)) {
+		return bj_win_type.player;
+	}
+	
+	var player_value = list_last(bj_hand_values(player_cards));
+	var dealer_value = list_last(bj_hand_values(dealer_cards));
+	
+	if (player_value == dealer_value) {
+		return bj_win_type.push;
+	}
+	
+	if (player_value > dealer_value) {
+		return bj_win_type.player;
+	}
+	
+	return bj_win_type.dealer;
 }
