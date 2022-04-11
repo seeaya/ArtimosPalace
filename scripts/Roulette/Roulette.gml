@@ -62,7 +62,7 @@ function rl_is_street(index, result) {
 }
 
 function rl_is_double_street(left_index, result) {
-	return rl_is_street(left_index, result) || rl_is_street(left_index + 1, result);
+	return rl_is_street(left_index * 2, result) || rl_is_street(left_index * 2 + 1, result);
 }
 
 function rl_is_five_number(result) {
@@ -97,7 +97,8 @@ function rl_is_high(result) {
 }
 
 function rl_is_even(result) {
-	return !rl_is_zero(result) && result % 2 == 0;
+	// I have no idea why it shouldn't be % 2 == 0
+	return !rl_is_zero(result) && result % 2 == 1;
 }
 
 function rl_is_odd(result) {

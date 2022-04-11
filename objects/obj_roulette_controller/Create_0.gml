@@ -4,6 +4,9 @@
 // Roulette requires dragging, so create drag controller
 instance_create_layer(0, 0, "Instances", obj_drag_controller);
 
+wheel = instance_create_layer(room_width / 2, room_height / 2, "Instances", obj_roulette_wheel);
+wheel.depth = -50;
+
 winning_number = k_roulette_zero;
 stage = roulette_game_stage_type.betting;
 
@@ -219,25 +222,93 @@ value_for_dzi_corners = function(index) {
 
 #endregion
 
-payout_chip = function(zone, multiplier) {
-	// TODO: Animate
+chips_taken = ds_list_create();
+
+chips_player_location_x = room_width / 2;
+chips_player_location_y = room_height + sprite_get_height(spr_chip_white) / 2;
+
+chips_dealer_location_x = room_width / 2;
+chips_dealer_location_y = -sprite_get_height(spr_chip_white) / 2;
+
+push_chip = function(chip) {
+	var path = path_add();
+	path_add_point(path, chip.x, chip.y, 1);
+	path_add_point(path, chips_player_location_x, chips_player_location_y, 1);
+	path_set_closed(path, false);
 	
-	if (multiplier == -1) {
-		
-	} else if (multiplier == 0) {
-		global.balance += win_amount;
-	} else {
-		var win_amount = multiplier * zone.chip.value;
-		global.balance += zone.chip.value;
-		global.balance += win_amount;
+	with (chip) {
+		path_start(path, 2000, path_action_stop, true);
+	}
+}
+
+win_chip = function(amount, x_location) {
+	var chip = instance_create_layer(x_location, chips_dealer_location_y, "Instances", obj_chip);
+	chip.draggable = false;
+	chip.value = amount;
+	chip.image_xscale = 0.5;
+	chip.image_yscale = 0.5;
+	
+	var path = path_add();
+	path_add_point(path, x_location, chips_dealer_location_y, 1);
+	path_add_point(path, chips_player_location_x, chips_player_location_y, 1);
+	path_set_closed(path, false);
+	
+	with (chip) {
+		path_start(path, 2000, path_action_stop, true);
 	}
 	
-	zone.chip.value = 0;
+	ds_list_add(chips_taken, chip);
+}
+
+lose_chip = function(chip) {
+	var path = path_add();
+	path_add_point(path, chip.x, chip.y, 1);
+	path_add_point(path, chips_dealer_location_x, chips_dealer_location_y, 1);
+	path_set_closed(path, false);
+	
+	with (chip) {
+		path_start(path, 2000, path_action_stop, true);
+	}
+}
+
+payout_chip = function(zone, multiplier) {
+	var chip = zone.chip;
+	
+	with zone {
+		self.chip = instance_create_layer(x + sprite_width / 2, y + sprite_height / 2, "Instances", obj_chip);
+		self.chip.image_xscale = 0.5;
+		self.chip.image_yscale = 0.5;
+	}
+	
+	if (multiplier == -1) {
+		lose_chip(chip);
+	} else if (multiplier == 0) {
+		push_chip(chip);
+	} else {
+		var win_amount = multiplier * chip.value;
+		push_chip(chip);
+		win_chip(win_amount, chip.x);
+	}
+	
+	global.balance += chip.value * (multiplier + 1)
+	
+	ds_list_add(chips_taken, chip);
 }
 
 #region Game transition functions
 
 begin_betting = function() {
+	stage = roulette_game_stage_type.betting;
+	
+	list_for_each(chips_taken, function(chip) {
+		instance_destroy(chip, true);
+	});
+	
+	ds_list_destroy(chips_taken);
+	chips_taken = ds_list_create();
+	
+	wheel.visible = false;
+	
 	game_button_top_left.text = "Repeat";
 	game_button_bottom_left.text = "Double";
 	game_button_top_right.text = "Clear";
@@ -257,6 +328,8 @@ begin_betting = function() {
 }
 
 begin_spin = function() {
+	stage = roulette_game_stage_type.wheel_spinning;
+	
 	game_button_top_left.is_enabled = false;
 	game_button_bottom_left.is_enabled = false;
 	game_button_top_right.is_enabled = false;
@@ -288,10 +361,17 @@ begin_spin = function() {
 	last_number_label.text = text;
 	last_number_label.visible = true;
 	
-	alarm[0] = 2 * room_speed;
+	wheel.visible = true;
+	wheel.spin(winning_number);
+	
+	alarm[0] = 5 * room_speed;
 }
 
 begin_payout = function() {
+	stage = roulette_game_stage_type.payout;
+	
+	wheel.visible = false;
+	
 	var text;
 	
 	if (winning_number == k_roulette_zero) {
@@ -353,23 +433,102 @@ begin_payout = function() {
 	}
 	
 	// Payout corners
+	for (var i = 0; i < ds_list_size(drop_zones_corners); ++i) {
+		var value = value_for_dzi_corners(i);
+		if (rl_is_corner(value, winning_number)) {
+			payout_chip(drop_zones_corners[| i], rl_multiplier_for_bet_type(roulette_bet_type.corner));
+		} else {
+			payout_chip(drop_zones_corners[| i], -1);
+		}
+	}
 	
 	// Payout streets
+	for (var i = 0; i < ds_list_size(drop_zones_streets); ++i) {
+		if (rl_is_street(i, winning_number)) {
+			payout_chip(drop_zones_streets[| i], rl_multiplier_for_bet_type(roulette_bet_type.street));
+		} else {
+			payout_chip(drop_zones_streets[| i], -1);
+		}
+	}
 	
 	// Payout double streets
+	for (var i = 0; i < ds_list_size(drop_zones_double_streets); ++i) {
+		if (rl_is_double_street(i, winning_number)) {
+			payout_chip(drop_zones_double_streets[| i], rl_multiplier_for_bet_type(roulette_bet_type.double_street));
+		} else {
+			payout_chip(drop_zones_double_streets[| i], -1);
+		}
+	}
 	
 	// Payout columns
+	for (var i = 0; i < ds_list_size(drop_zones_columns); ++i) {
+		if (rl_is_column(i, winning_number)) {
+			payout_chip(drop_zones_columns[| i], rl_multiplier_for_bet_type(roulette_bet_type.column));
+		} else {
+			payout_chip(drop_zones_columns[| i], -1);
+		}
+	}
 	
-	// Payout doubles
+	// Payout dozens
+	for (var i = 0; i < ds_list_size(drop_zones_dozens); ++i) {
+		if (rl_is_dozen(i, winning_number)) {
+			payout_chip(drop_zones_dozens[| i], rl_multiplier_for_bet_type(roulette_bet_type.dozen));
+		} else {
+			payout_chip(drop_zones_dozens[| i], -1);
+		}
+	}
 	
 	// Payout red/black
+	if (rl_is_red(winning_number)) {
+		payout_chip(drop_zone_red, rl_multiplier_for_bet_type(roulette_bet_type.red));
+	} else {
+		payout_chip(drop_zone_red, -1);
+	}
+	
+	if (rl_is_black(winning_number)) {
+		payout_chip(drop_zone_black, rl_multiplier_for_bet_type(roulette_bet_type.black));
+	} else {
+		payout_chip(drop_zone_black, -1);
+	}
 	
 	// Payout odd/even
+	if (rl_is_odd(winning_number)) {
+		payout_chip(drop_zone_odd, rl_multiplier_for_bet_type(roulette_bet_type.odd));
+	} else {
+		payout_chip(drop_zone_odd, -1);
+	}
+	
+	if (rl_is_even(winning_number)) {
+		payout_chip(drop_zone_even, rl_multiplier_for_bet_type(roulette_bet_type.even));
+	} else {
+		payout_chip(drop_zone_even, -1);
+	}
 	
 	// Payout high/low
+	if (rl_is_high(winning_number)) {
+		payout_chip(drop_zone_high, rl_multiplier_for_bet_type(roulette_bet_type.high));
+	} else {
+		payout_chip(drop_zone_high, -1);
+	}
+	
+	if (rl_is_low(winning_number)) {
+		payout_chip(drop_zone_low, rl_multiplier_for_bet_type(roulette_bet_type.low));
+	} else {
+		payout_chip(drop_zone_low, -1);
+	}
 	
 	// Payout three/five
+	if (rl_is_three_number(winning_number)) {
+		payout_chip(drop_zone_three_number, rl_multiplier_for_bet_type(roulette_bet_type.three_number));
+	} else {
+		payout_chip(drop_zone_three_number, -1);
+	}
 	
+	if (rl_is_five_number(winning_number)) {
+		payout_chip(drop_zone_five_number, rl_multiplier_for_bet_type(roulette_bet_type.five_number));
+	} else {
+		payout_chip(drop_zone_five_number, -1);
+	}
 	
 	alarm[1] = 2 * room_speed;
 }

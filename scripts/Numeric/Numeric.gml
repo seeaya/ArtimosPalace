@@ -13,3 +13,13 @@ function array_to_list(arr) {
 	
 	return list;
 }
+
+function arrays_to_map(keys, values) {
+	var map = ds_map_create();
+	
+	for (var i = 0; i < array_length(keys); ++i) {
+		ds_map_add(map, keys[i], values[i]);
+	}
+	
+	return map;
+}
