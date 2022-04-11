@@ -15,17 +15,79 @@ first_card_positions_y = array_to_list([800, 1088,  800,  224]);
 
 hands = ds_list_create();
 
-betting_insurance = array_to_list([false, false, false]);
+#region Payouts
 
 chips_taken = ds_list_create();
 
-chips_win_dest_x = room_width / 2;
-chips_win_dest_y = room_height + sprite_get_height(spr_chip_white) / 2;
+chips_player_location_x = room_width / 2;
+chips_player_location_y = room_height + sprite_get_height(spr_chip_white) / 2;
 
-chips_lose_dest_x = room_width / 2;
-chips_lose_dest_y = -sprite_get_height(spr_chip_white) / 2;
+chips_dealer_location_x = room_width / 2;
+chips_dealer_location_y = -sprite_get_height(spr_chip_white) / 2;
 
-// Game transition functions
+push_chip = function(chip) {
+	var path = path_add();
+	path_add_point(path, chip.x, chip.y, 1);
+	path_add_point(path, chips_player_location_x, chips_player_location_y, 1);
+	path_set_closed(path, false);
+	
+	with (chip) {
+		path_start(path, 2000, path_action_stop, true);
+	}
+}
+
+win_chip = function(amount) {
+	var chip = instance_create_layer(chips_dealer_location_x, chips_dealer_location_y, "Instances", obj_chip);
+	chip.draggable = false;
+	chip.value = amount;
+	chip.x = chips_dealer_location_x;
+	chip.y = chips_dealer_location_y;
+	chip.image_xscale = 0.75;
+	chip.image_yscale = 0.75;
+	
+	var path = path_add();
+	path_add_point(path, chips_dealer_location_x, chips_dealer_location_y, 1);
+	path_add_point(path, chips_player_location_x, chips_player_location_y, 1);
+	path_set_closed(path, false);
+	
+	with (chip) {
+		path_start(path, 2000, path_action_stop, true);
+	}
+	
+	ds_list_add(chips_taken, chip);
+}
+
+lose_chip = function(chip) {
+	var path = path_add();
+	path_add_point(path, chip.x, chip.y, 1);
+	path_add_point(path, chips_dealer_location_x, chips_dealer_location_y, 1);
+	path_set_closed(path, false);
+	
+	with (chip) {
+		path_start(path, 2000, path_action_stop, true);
+	}
+}
+
+payout_chip = function(chip, multiplier) {
+	if (multiplier == -1) {
+		lose_chip(chip);
+	} else if (multiplier == 0) {
+		push_chip(chip);
+	} else {
+		var win_amount = multiplier * chip.value;
+		push_chip(chip);
+		win_chip(win_amount);
+	}
+	
+	global.balance += chip.value * (multiplier + 1)
+	
+	ds_list_add(chips_taken, chip);
+}
+
+#endregion
+
+#region Game transition functions
+
 begin_betting = function() {
 	stage = bj_game_stage_type.betting;
 	game_button_top_left.text = "Repeat";
@@ -61,14 +123,6 @@ begin_betting = function() {
 	plus_three_drop_zone_left.chip.draggable = true;
 	plus_three_drop_zone_center.chip.draggable = true;
 	plus_three_drop_zone_right.chip.draggable = true;
-	
-	// Remove all chips previously removed
-	for (var i = 0; i < ds_list_size(chips_taken); ++i) {
-		instance_destroy(chips_taken[| i], true);
-	}
-	
-	ds_list_destroy(chips_taken);
-	chips_taken = ds_list_create();
 	
 	list_for_each(hands, function(hand) {
 		instance_destroy(hand);
@@ -107,7 +161,7 @@ game_begin = function() {
 	for (var i = 0; i < 3; ++i) {
 		if (main_drop_zones()[| i].chip.value > 0) {
 			var hand = instance_create_layer(first_card_positions_x[| i], first_card_positions_y[| i], "Instances", obj_blackjack_hand);
-			hand.play_index = i;
+			hand.play_index = ds_list_size(hands);
 			hand.bet = main_drop_zones()[| i].chip;
 			with main_drop_zones()[| i] {
 				// Create chip over drop zone, to draw chip when there is a bet
@@ -135,7 +189,7 @@ game_begin = function() {
 		insurance_begin();
 	} else {
 		// Otherwise, continue on with game (paying out blackjacks is next)
-		payout_blackjacks();
+		alarm[2] = 2 * room_speed;
 	}
 }
 
@@ -152,8 +206,6 @@ insurance_begin = function() {
 	game_button_bottom_left.is_enabled = false;
 	game_button_top_right.is_enabled = true;
 	game_button_bottom_right.is_enabled = true;
-	
-	betting_insurance = array_to_list([false, false, false]);
 }
 
 insurance_check_cards = function() {
@@ -194,24 +246,29 @@ payout_blackjacks = function() {
 		// Show dealer's down card
 		list_last(hands).cards[| 1].face_up = true;
 		had_blackjack = true;
+		update_card_info();
 		
 		for (var i = 0; i < ds_list_size(hands) - 1; ++i) {
 			if (bj_is_blackjack(hands[| i].card_values())) {
 				// Player had blackjack too - push
-				// TODO: Push
+				payout_chip(hands[| i].bet, 0);
 			} else {
 				// Player did not have blackjack - lose
-				// TODO: Lose bet
+				payout_chip(hands[| i].bet, -1);
 			}
 		}
 	} else {
 		// Dealer does not have blackjack
-		for (var i = 0; i < ds_list_size(hands) - 2; ++i) {
+		for (var i = 0; i < ds_list_size(hands) - 1; ++i) {
 			if (bj_is_blackjack(hands[| i].card_values())) {
 				// Player had blackjack - win
-				// TODO: Win
-				
+				payout_chip(hands[| i].bet, 1.5);
 				had_blackjack = true;
+				
+				// Remove hand
+				//instance_destroy(hands[| i], true);
+				//ds_list_delete(hands, i);
+				//--i;
 			}
 		}
 		
@@ -222,6 +279,7 @@ payout_blackjacks = function() {
 		// Wait two seconds to pay out blackjacks
 		alarm[1] = room_speed * 2;
 	} else {
+		// FIXME: This if-statement is always false
 		if (bj_is_blackjack(list_last(hands).card_values())) {
 			// Dealer had blackjack, no more actions, start new round of betting
 			begin_betting();
@@ -240,9 +298,15 @@ play_begin = function() {
 }
 
 dealer_begin = function() {
+	game_button_top_left.is_enabled = false;
+	game_button_bottom_left.is_enabled = false;
+	game_button_top_right.is_enabled = false;
+	game_button_bottom_right.is_enabled = false;
+	
 	stage = bj_game_stage_type.dealer_turn;
 	list_last(hands).cards[| 1].face_up = true;
-	list_last(hands).update_ui();
+	update_card_info();
+	
 	alarm[3] = room_speed * 2;
 }
 
@@ -251,55 +315,39 @@ payout_begin = function() {
 	
 	for (var i = 0; i < ds_list_size(hands) - 1; ++i) {
 		var player_card_values = hands[| i].card_values();
+		var multiplier;
 		
 		switch (bj_compare_hands(player_card_values, dealer_card_values)) {
 		case bj_win_type.dealer:
-			// TODO: Take bet
+			multiplier = -1;
 			break;
 		case bj_win_type.player:
-			// TODO: Payout
+			multiplier = 1;
 			break;
 		case bj_win_type.push:
-			// TODO: Push
+			multiplier = 0;
 			break;
 		}
+		
+		payout_chip(hands[| i].bet, multiplier);
 	}
 	
 	alarm[5] = 2 * room_speed;
 }
 
-// UI Functions
+#endregion
+
+#region UI Functions
+
 update_card_info = function() {
 	list_for_each(hands, function(hand) {
 		hand.update_ui();
 	});
 }
 
-value_label = function(cards) {
-	if (ds_list_size(cards) == 1) {
-		var value = bj_card_value(cards[| 0]);
-		if (value == 1) {
-			return "11"
-		}
-		return string(value)
-	}
-	
-	var values = bj_hand_values(cards);
-	
-	if (bj_is_blackjack(cards)) {
-		return "BJ";
-	}
-	
-	if (values[| 0] > 21) {
-		return "Bust";
-	}
-	
-	if (ds_list_size(values) == 1) {
-		return string(values[| 0]);
-	}
-	
-	return string(values[| 0]) + "/" + string(values[| 1]);
-}
+#endregion
+
+#region Interface items
 
 // Drop zone interface items
 main_drop_zone_left = undefined;
@@ -320,6 +368,13 @@ game_button_bottom_left = undefined;
 game_button_top_right = undefined;
 game_button_bottom_right = undefined;
 
+// Note: For this to work, the creation order for this object must be after all interface items
+load_interface_vars_from_room();
+
+#endregion
+
+#region Drop zone lists
+
 main_drop_zones = function() {
 	return array_to_list([main_drop_zone_left, main_drop_zone_center, main_drop_zone_right]);
 }
@@ -332,8 +387,9 @@ plus_three_drop_zones = function() {
 	return array_to_list([plus_three_drop_zone_left, plus_three_drop_zone_center, plus_three_drop_zone_right]);
 }
 
-// Note: For this to work, the creation order for this object must be after all interface items
-load_interface_vars_from_room();
+#endregion
+
+#region Hand helpers
 
 next_card = function() {
 	if (ds_list_size(shoe.cards) <= 52) {
@@ -348,12 +404,15 @@ end_hand = function() {
 	if (play_index == ds_list_size(hands) - 2) {
 		// Dealer turn
 		dealer_begin();
+		++play_index;
 	} else {
 		++play_index;
 	}
 }
 
-// Game actions
+#endregion
+
+#region Game actions
 game_action_play = function() {
 	game_begin();
 }
@@ -377,7 +436,7 @@ game_action_repeat_bet = function() {
 }
 
 game_action_double_down = function() {
-	// TODO: Implement
+	hands[| play_index].double_down();
 }
 
 game_action_double_bet = function() {
@@ -385,7 +444,7 @@ game_action_double_bet = function() {
 }
 
 game_action_split = function() {
-	// TODO: Implement
+	hands[| play_index].split();
 }
 
 game_action_bet_insurance = function() {
@@ -395,6 +454,10 @@ game_action_bet_insurance = function() {
 game_action_hit = function() {
 	hands[| play_index].hit();
 }
+
+#endregion
+
+#region Button actions
 
 game_button_top_left.action = function() {
 	switch (stage) {
@@ -460,5 +523,7 @@ game_button_bottom_right.action = function() {
 		break;
 	}
 }
+
+#endregion
 
 begin_betting();

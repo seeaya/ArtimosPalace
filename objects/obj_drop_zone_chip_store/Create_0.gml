@@ -9,5 +9,6 @@ should_accept_drop = function(item) {
 
 // When dropping a bet from another zone, set the bet from the zone to zero (moving bet back to balance)
 accept_drop = function(item) {
+	global.balance += item.value;
 	item.value = 0;
 }

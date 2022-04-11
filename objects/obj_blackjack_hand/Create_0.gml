@@ -1,14 +1,16 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-has_split = true;
-has_double_down = true;
+has_split = false;
+has_double_down = false;
 betting_insurance = false;
 play_index = 0;
 cards = ds_list_create();
 is_dealer = false;
 
 bet = undefined;
+
+insurance_bet = undefined;
 
 count_label = instance_create_layer(x - 224, y, "Instances", obj_label_highlighted);
 
@@ -101,13 +103,74 @@ stand = function() {
 
 double_down = function() {
 	// TODO: Implement
+	has_double_down = true;
+	
+	var last_card = list_last(cards);
+	
+	var next_card = instance_create_layer(last_card.x + 96, last_card.y - 64, "Instances", obj_card);
+	next_card.depth = last_card.depth - 1;
+	next_card.card = obj_blackjack_controller.next_card();
+	next_card.image_angle = 90;
+	
+	ds_list_add(cards, next_card);
+	
+	// TODO: Animate bet
+	global.balance -= bet.value;
+	bet.value *= 2;
 }
 
 split = function() {
 	// TODO: Implement
+	
+	has_split = true;
+	
+	// Remove second card from this hand
+	var second_card = cards[| 1];
+	ds_list_delete(cards, 1);
+	
+	var move_amount_x = 320;
+	
+	// Move this hand
+	x -= move_amount_x;
+	cards[| 0].x = x;
+	bet.x -= move_amount_x;
+	count_label.x -= move_amount_x;
+	
+	// Create second hand
+	var second_hand = instance_create_layer(x + 2 * move_amount_x, y, "Instances", obj_blackjack_hand);
+	second_hand.cards = array_to_list([second_card])
+	second_hand.has_split = true;
+	
+	second_card.x = second_hand.x;
+	second_card.y = second_hand.y;
+	
+	// Create second bet
+	var second_bet = instance_create_layer(bet.x + 2 * move_amount_x, bet.y, "Instances", obj_chip);
+	second_bet.value = bet.value;
+	second_bet.image_xscale = 0.75;
+	second_bet.image_yscale = 0.75;
+	second_hand.bet = second_bet;
+	
+	// TODO: Animate this bet
+	global.balance -= bet.value;
+	
+	// Insert new hand into hand list, and update future hands play_index
+	ds_list_insert(obj_blackjack_controller.hands, play_index + 1, second_hand);
+	
+	for (var i = play_index + 1; i < ds_list_size(obj_blackjack_controller.hands); ++i) {
+		obj_blackjack_controller.hands[| i].play_index = i;
+	}
+	
+	// Take one new card for each hand
+	hit();
+	second_hand.hit();
 }
 
 can_hit = function() {
+	if (has_double_down) {
+		return false;
+	}
+	
 	return list_last(bj_hand_values(card_values())) < 21;
 }
 

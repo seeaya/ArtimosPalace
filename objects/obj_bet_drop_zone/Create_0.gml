@@ -8,7 +8,13 @@ should_accept_drop = function(item) {
 		return false;
 	}
 	
-	return item.object_index == obj_chip_store || item.object_index == obj_chip;
+	if (item.object_index == obj_chip_store) {
+		return global.balance >= item.value;
+	} else if (item.object_index == obj_chip) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 accept_drop = function(item) {
@@ -16,6 +22,7 @@ accept_drop = function(item) {
 	case obj_chip_store:
 		// Dragging from chip store, add value of chip to bet.
 		chip.value += item.value;
+		global.balance -= item.value;
 		break;
 	case obj_chip:
 		// Dragging from other bet, add other bet to this bet, set other bet to zero (a move).

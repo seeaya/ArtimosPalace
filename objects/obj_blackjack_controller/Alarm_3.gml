@@ -1,5 +1,7 @@
 /// @description Blackjack dealer show card
 
+list_last(hands).cards[| 1].face_up = true;
+
 var cards = list_last(hands).card_values();
 var value = list_last(bj_hand_values(cards));
 

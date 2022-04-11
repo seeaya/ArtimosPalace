@@ -34,6 +34,18 @@ function list_for_each(list, closure) {
 	}
 }
 
+/// @description Reduces the given list using the given closure and initial value.
+function list_reduce(list, initial_value, closure) {
+	var value = initial_value;
+	var list_size = ds_list_size(list);
+	
+	for (var i = 0; i < list_size; ++i) {
+		value = closure(value, list[| i]);
+	}
+	
+	return value;
+}
+
 /// @description Returns a list containing only the elements in the given list that satisfy the given predicate.
 function list_filter(list, predicate) {
 	var filtered = ds_list_create();
