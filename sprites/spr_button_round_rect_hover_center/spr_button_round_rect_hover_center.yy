@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_button_round_rect_hover_center","path":"sprites/spr_button_round_rect_hover_center/spr_button_round_rect_hover_center.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_button_round_rect_hover_center",
     "tags": [],
     "resourceType": "GMSequence",

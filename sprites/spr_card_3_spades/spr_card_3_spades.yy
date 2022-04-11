@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_card_3_spades","path":"sprites/spr_card_3_spades/spr_card_3_spades.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_card_3_spades",
     "tags": [],
     "resourceType": "GMSequence",

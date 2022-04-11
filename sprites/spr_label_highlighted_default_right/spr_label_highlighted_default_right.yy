@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_label_highlighted_default_right","path":"sprites/spr_label_highlighted_default_right/spr_label_highlighted_default_right.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_label_highlighted_default_right",
     "tags": [],
     "resourceType": "GMSequence",

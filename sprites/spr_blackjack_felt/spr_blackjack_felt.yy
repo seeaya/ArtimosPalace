@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_blackjack_felt","path":"sprites/spr_blackjack_felt/spr_blackjack_felt.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_blackjack_felt",
     "tags": [],
     "resourceType": "GMSequence",

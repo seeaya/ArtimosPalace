@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_button_round_rect_disabled","path":"sprites/spr_button_round_rect_disabled/spr_button_round_rect_disabled.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_button_round_rect_disabled",
     "tags": [],
     "resourceType": "GMSequence",

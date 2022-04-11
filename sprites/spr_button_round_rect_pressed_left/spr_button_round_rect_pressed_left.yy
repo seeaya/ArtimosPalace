@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_button_round_rect_pressed_left","path":"sprites/spr_button_round_rect_pressed_left/spr_button_round_rect_pressed_left.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_button_round_rect_pressed_left",
     "tags": [],
     "resourceType": "GMSequence",

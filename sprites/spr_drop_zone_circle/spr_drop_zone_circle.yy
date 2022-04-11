@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_drop_zone_circle","path":"sprites/spr_drop_zone_circle/spr_drop_zone_circle.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_drop_zone_circle",
     "tags": [],
     "resourceType": "GMSequence",

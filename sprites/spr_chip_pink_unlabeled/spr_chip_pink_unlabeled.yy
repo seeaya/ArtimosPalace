@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_chip_pink_unlabeled","path":"sprites/spr_chip_pink_unlabeled/spr_chip_pink_unlabeled.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_chip_pink_unlabeled",
     "tags": [],
     "resourceType": "GMSequence",

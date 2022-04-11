@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_button_round_rect_default","path":"sprites/spr_button_round_rect_default/spr_button_round_rect_default.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_button_round_rect_default",
     "tags": [],
     "resourceType": "GMSequence",
