@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_card_2_hearts","path":"sprites/spr_card_2_hearts/spr_card_2_hearts.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_card_2_hearts",
     "tags": [],
     "resourceType": "GMSequence",

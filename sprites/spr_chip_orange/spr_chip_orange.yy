@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_chip_orange","path":"sprites/spr_chip_orange/spr_chip_orange.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_chip_orange",
     "tags": [],
     "resourceType": "GMSequence",

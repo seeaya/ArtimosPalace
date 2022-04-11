@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_card_9_diamonds","path":"sprites/spr_card_9_diamonds/spr_card_9_diamonds.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_card_9_diamonds",
     "tags": [],
     "resourceType": "GMSequence",

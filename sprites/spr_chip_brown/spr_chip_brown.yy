@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_chip_brown","path":"sprites/spr_chip_brown/spr_chip_brown.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_chip_brown",
     "tags": [],
     "resourceType": "GMSequence",
