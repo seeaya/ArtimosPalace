@@ -111,3 +111,11 @@ function list_last(list) {
 	
 	return list[| ds_list_size(list) - 1];
 }
+
+function list_append_list(list, append) {
+	var list_size = ds_list_size(append);
+	
+	for (var i = 0; i < list_size; ++i) {
+		ds_list_add(list, append[| i]);
+	}
+}

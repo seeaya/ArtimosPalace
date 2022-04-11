@@ -1,3 +1,9 @@
+enum roulette_game_stage_type {
+	betting,
+	wheel_spinning,
+	payout,
+}
+
 enum roulette_bet_type {
 	straight_up,
 	split,
@@ -40,7 +46,7 @@ function rl_is_horizontal_double(left, result) {
 		return result == k_roulette_zero || result == 1;
 	}
 	
-	return result == left || result == top + 3;
+	return result == left || result == left + 3;
 }
 
 function rl_is_corner(top_left, result) {
@@ -68,10 +74,10 @@ function rl_is_three_number(result) {
 }
 
 function rl_is_dozen(index, result) {
-	var min = index * 12 + 1;
-	var max = min + 12;
+	var min_val = index * 12 + 1;
+	var max_val = min_val + 12;
 	
-	return result >= min && result < max;
+	return result >= min_val && result < max_val;
 }
 
 function rl_is_column(index, result) {
@@ -130,35 +136,35 @@ function rl_is_black(result) {
 
 function rl_multiplier_for_bet_type(bet_type) {
 	switch (bet_type) {
-	case straight_up:
+	case roulette_bet_type.straight_up:
 		return 35;
-	case split:
+	case roulette_bet_type.split:
 		return 17;
-	case corner:
+	case roulette_bet_type.corner:
 		return 8;
-	case street:
+	case roulette_bet_type.street:
 		return 11;
-	case double_street:
+	case roulette_bet_type.double_street:
 		return 5;
-	case five_number:
+	case roulette_bet_type.five_number:
 		return 6;
-	case three_number:
+	case roulette_bet_type.three_number:
 		return 11;
-	case dozen:
+	case roulette_bet_type.dozen:
 		return 2;
-	case column:
+	case roulette_bet_type.column:
 		return 2;
-	case red:
+	case roulette_bet_type.red:
 		return 1;
-	case black:
+	case roulette_bet_type.black:
 		return 1;
-	case odd:
+	case roulette_bet_type.odd:
 		return 1;
-	case even:
+	case roulette_bet_type.even:
 		return 1;
-	case high:
+	case roulette_bet_type.high:
 		return 1;
-	case low:
+	case roulette_bet_type.low:
 		return 1;
 	}
 }

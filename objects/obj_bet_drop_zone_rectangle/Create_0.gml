@@ -34,9 +34,12 @@ accept_drop = function(item) {
 	
 }
 
-// Create chip over drop zone, to draw chip when there is a bet
-chip = instance_create_layer(x, y, "Instances", obj_chip);
-
-// Chips scaled by 75%
-chip.image_xscale = 0.5;
-chip.image_yscale = 0.5;
+add_chip = function() {
+	
+	// Create chip over drop zone, to draw chip when there is a bet
+	chip = instance_create_layer(x + sprite_width / 2, y + sprite_height / 2, "Instances", obj_chip);
+	
+	// Chips scaled by 75%
+	chip.image_xscale = 0.5;
+	chip.image_yscale = 0.5;
+}
