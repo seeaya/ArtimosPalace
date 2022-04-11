@@ -36,17 +36,15 @@ push_chip = function(chip) {
 	}
 }
 
-win_chip = function(amount) {
-	var chip = instance_create_layer(chips_dealer_location_x, chips_dealer_location_y, "Instances", obj_chip);
+win_chip = function(amount, x_location) {
+	var chip = instance_create_layer(x_location, chips_dealer_location_y, "Instances", obj_chip);
 	chip.draggable = false;
 	chip.value = amount;
-	chip.x = chips_dealer_location_x;
-	chip.y = chips_dealer_location_y;
 	chip.image_xscale = 0.75;
 	chip.image_yscale = 0.75;
 	
 	var path = path_add();
-	path_add_point(path, chips_dealer_location_x, chips_dealer_location_y, 1);
+	path_add_point(path, x_location, chips_dealer_location_y, 1);
 	path_add_point(path, chips_player_location_x, chips_player_location_y, 1);
 	path_set_closed(path, false);
 	
@@ -76,7 +74,7 @@ payout_chip = function(chip, multiplier) {
 	} else {
 		var win_amount = multiplier * chip.value;
 		push_chip(chip);
-		win_chip(win_amount);
+		win_chip(win_amount, chip.x);
 	}
 	
 	global.balance += chip.value * (multiplier + 1)
@@ -171,9 +169,40 @@ game_begin = function() {
 				chip.image_xscale = 0.75;
 				chip.image_yscale = 0.75;
 			}
+			
+			if (plus_three_drop_zones()[| i].chip.value > 0) {
+				// Add plus three side bet to hand
+				hand.plus_three_bet = plus_three_drop_zones()[| i].chip;
+				with plus_three_drop_zones()[| i] {
+					// Create chip over drop zone, to draw chip when there is a bet
+					chip = instance_create_layer(x, y, "Instances", obj_chip);
+					chip.image_xscale = 0.75;
+					chip.image_yscale = 0.75;
+				}
+			}
+			
+			if (lucky_aces_drop_zones()[| i].chip.value > 0) {
+				// Add lucky aces side bet to hand
+				// Add plus three side bet to hand
+				hand.lucky_aces_bet = lucky_aces_drop_zones()[| i].chip;
+				with lucky_aces_drop_zones()[| i] {
+					// Create chip over drop zone, to draw chip when there is a bet
+					chip = instance_create_layer(x, y, "Instances", obj_chip);
+					chip.image_xscale = 0.75;
+					chip.image_yscale = 0.75;
+				}
+			}
 		
 			hand.add_initial_cards();
 			ds_list_add(hands, hand);
+		} else {
+			// Remove side-bets (not playable without main bet)
+			// TODO: Prevent this from happening in betting stage
+			global.balance += plus_three_drop_zones()[| i].chip.value;
+			plus_three_drop_zones()[| i].chip.value = 0;
+			
+			global.balance += lucky_aces_drop_zones()[| i].chip.value;
+			lucky_aces_drop_zones()[| i].chip.value = 0;
 		}
 	}
 	
@@ -184,13 +213,77 @@ game_begin = function() {
 	hand.add_initial_cards();
 	ds_list_add(hands, hand);
 	
-	if (list_first(list_last(hands).card_values()).rank == rank_type.a) {
-		// Up card is ace, begin insurance
-		insurance_begin();
-	} else {
-		// Otherwise, continue on with game (paying out blackjacks is next)
-		alarm[2] = 2 * room_speed;
+	alarm[6] = 2 * room_speed;
+}
+
+plus_three_begin = function() {
+	stage = bj_game_stage_type.plus_three_payout;
+	
+	var plus_three_sidebets = list_filter(hands, function(hand) {
+		return hand.plus_three_bet != undefined;
+	});
+	
+	if (ds_list_size(plus_three_sidebets) == 0) {
+		// No bets placed, begin lucky aces now
+		lucky_aces_begin();
+		return;
 	}
+	
+	// Payout sidebets
+	for (var i = 0; i < ds_list_size(hands) - 1; ++i) {
+		if (hands[| i].plus_three_bet != undefined) {
+			var cards = ds_list_create()
+			ds_list_add(cards, hands[| i].card_values()[| 0]);
+			ds_list_add(cards, hands[| i].card_values()[| 1]);
+			ds_list_add(cards, list_last(hands).card_values()[| 0]);
+			
+			var result = bj_pt_win_type(cards);
+			var multiplier = bj_pt_win_multiplier(result);
+			payout_chip(hands[| i].plus_three_bet, multiplier);
+			
+			ds_list_destroy(cards);
+		}
+	}
+	
+	alarm[6] = 2 * room_speed;
+}
+
+lucky_aces_begin = function() {
+	stage = bj_game_stage_type.lucky_aces_payout;
+	
+	var lucky_aces_sidebets = list_filter(hands, function(hand) {
+		return hand.lucky_aces_bet != undefined;
+	});
+	
+	if (ds_list_size(lucky_aces_sidebets) == 0) {
+		// No bets placed, begin next stage now
+			if (list_first(list_last(hands).card_values()).rank == rank_type.a) {
+			// Up card is ace, begin insurance
+			insurance_begin();
+		} else {
+			// Otherwise, continue on with game (paying out blackjacks is next)
+			alarm[2] = 2 * room_speed;
+		}
+		return;
+	}
+	
+	// Payout sidebets
+	for (var i = 0; i < ds_list_size(hands) - 1; ++i) {
+		if (hands[| i].lucky_aces_bet != undefined) {
+			var cards = ds_list_create()
+			ds_list_add(cards, hands[| i].card_values()[| 0]);
+			ds_list_add(cards, hands[| i].card_values()[| 1]);
+			ds_list_add(cards, list_last(hands).card_values()[| 0]);
+			
+			var result = bj_la_win_type(cards);
+			var multiplier = bj_la_win_multiplier(result);
+			payout_chip(hands[| i].lucky_aces_bet, multiplier);
+			
+			ds_list_destroy(cards);
+		}
+	}
+	
+	alarm[6] = 2 * room_speed;
 }
 
 insurance_begin = function() {
@@ -216,6 +309,7 @@ insurance_check_cards = function() {
 	
 	if (bj_is_blackjack(list_last(hands).card_values())) {
 		list_last(hands).cards[| 1].face_up = true;
+		update_card_info();
 	}
 	
 	alarm[0] = room_speed * 2;
@@ -256,6 +350,12 @@ payout_blackjacks = function() {
 				// Player did not have blackjack - lose
 				payout_chip(hands[| i].bet, -1);
 			}
+			
+			// Payout insurance
+			if (hands[| i].insurance_bet != undefined) {
+				payout_chip(hands[| i].insurance_bet, 2);
+				hands[| i].insurance_bet = undefined;
+			}
 		}
 	} else {
 		// Dealer does not have blackjack
@@ -264,15 +364,14 @@ payout_blackjacks = function() {
 				// Player had blackjack - win
 				payout_chip(hands[| i].bet, 1.5);
 				had_blackjack = true;
-				
-				// Remove hand
-				//instance_destroy(hands[| i], true);
-				//ds_list_delete(hands, i);
-				//--i;
+			}
+			
+			// Lose insurance
+			if (hands[| i].insurance_bet != undefined) {
+				payout_chip(hands[| i].insurance_bet, -1);
+				hands[| i].insurance_bet = undefined;
 			}
 		}
-		
-		// TODO: Take insurance
 	}
 	
 	if (had_blackjack) {
@@ -418,6 +517,8 @@ game_action_play = function() {
 }
 
 game_action_no_insurance = function() {
+	hands[| play_index].pass_insurance();
+	
 	if (play_index == ds_list_size(hands) - 2) {
 		// Done with insurance bets, check dealer's cards next
 		insurance_check_cards();
@@ -449,6 +550,14 @@ game_action_split = function() {
 
 game_action_bet_insurance = function() {
 	hands[| play_index].play_insurance();
+	
+	if (play_index == ds_list_size(hands) - 2) {
+		// Done with insurance bets, check dealer's cards next
+		insurance_check_cards();
+	} else {
+		// No insurance, have next hand bet
+		play_index += 1;
+	}
 }
 
 game_action_hit = function() {

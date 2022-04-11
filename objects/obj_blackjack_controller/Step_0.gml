@@ -69,6 +69,7 @@ case bj_game_stage_type.player_turn:
 	update_card_info();
 	break;
 case bj_game_stage_type.insurance_betting:
+	game_button_top_right.is_enabled = hands[| play_index].can_play_insurance();
 	update_card_info();
 	break;
 default:

@@ -1,7 +1,7 @@
 enum bj_game_stage_type {
 	betting,
 	plus_three_payout,
-	perfect_pair_payout,
+	lucky_aces_payout,
 	insurance_betting,
 	insurance_check,
 	insurance_payout,

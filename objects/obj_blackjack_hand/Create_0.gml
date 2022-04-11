@@ -3,7 +3,6 @@
 
 has_split = false;
 has_double_down = false;
-betting_insurance = false;
 play_index = 0;
 cards = ds_list_create();
 is_dealer = false;
@@ -11,6 +10,8 @@ is_dealer = false;
 bet = undefined;
 
 insurance_bet = undefined;
+lucky_aces_bet = undefined;
+plus_three_bet = undefined;
 
 count_label = instance_create_layer(x - 224, y, "Instances", obj_label_highlighted);
 
@@ -185,10 +186,21 @@ can_split = function() {
 	return !has_split && has_funds && same_cards;
 }
 
+can_play_insurance = function() {
+	return global.balance >= bet_amount() / 2;
+}
+
 play_insurance = function() {
-	// TODO: Implement
+	// Make bet
+	insurance_bet = instance_create_layer(bet.x + 200, bet.y, "Instances", obj_chip);
+	insurance_bet.value = bet.value / 2;
+	insurance_bet.image_xscale = 0.75;
+	insurance_bet.image_yscale = 0.75;
+	
+	// TODO: Animate chips
+	global.balance -= insurance_bet.value;
 }
 
 pass_insurance = function() {
-	// TODO: Implement
+	// Do nothing
 }
