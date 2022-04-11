@@ -37,6 +37,7 @@
     {"id":{"name":"spr_chip_red","path":"sprites/spr_chip_red/spr_chip_red.yy",},"order":7,},
     {"id":{"name":"obj_game_controller","path":"objects/obj_game_controller/obj_game_controller.yy",},"order":0,},
     {"id":{"name":"obj_casino","path":"objects/obj_casino/obj_casino.yy",},"order":3,},
+    {"id":{"name":"obj_board_3","path":"objects/obj_board_3/obj_board_3.yy",},"order":9,},
     {"id":{"name":"spr_chip_brown_unlabeled","path":"sprites/spr_chip_brown_unlabeled/spr_chip_brown_unlabeled.yy",},"order":12,},
     {"id":{"name":"spr_player_up_right","path":"sprites/spr_player_up_right/spr_player_up_right.yy",},"order":23,},
     {"id":{"name":"spr_chip_orange","path":"sprites/spr_chip_orange/spr_chip_orange.yy",},"order":4,},
