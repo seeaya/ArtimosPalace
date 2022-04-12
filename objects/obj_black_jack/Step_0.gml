@@ -5,5 +5,5 @@
 event_inherited();
 
 if(visible && keyboard_check(interact_key)) {
-	// Go into blackjack
+	room_goto(rm_blackjack);
 }

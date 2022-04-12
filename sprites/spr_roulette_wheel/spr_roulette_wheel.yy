@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_roulette_wheel","path":"sprites/spr_roulette_wheel/spr_roulette_wheel.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_roulette_wheel",
     "tags": [],
     "resourceType": "GMSequence",

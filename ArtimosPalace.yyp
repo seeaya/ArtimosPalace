@@ -176,7 +176,6 @@
     {"id":{"name":"ts_interior","path":"tilesets/ts_interior/ts_interior.yy",},"order":0,},
     {"id":{"name":"casino_1","path":"rooms/casino_1/casino_1.yy",},"order":0,},
     {"id":{"name":"obj_bet_drop_zone_rectangle","path":"objects/obj_bet_drop_zone_rectangle/obj_bet_drop_zone_rectangle.yy",},"order":6,},
-    {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
   ],
   "Options": [
     {"name":"Android","path":"options/android/options_android.yy",},
@@ -197,10 +196,9 @@
     "children": [],
   },
   "RoomOrderNodes": [
-    {"roomId":{"name":"casino_1","path":"rooms/casino_1/casino_1.yy",},},
     {"roomId":{"name":"rm_start","path":"rooms/rm_start/rm_start.yy",},},
+    {"roomId":{"name":"casino_1","path":"rooms/casino_1/casino_1.yy",},},
     {"roomId":{"name":"rm_blackjack","path":"rooms/rm_blackjack/rm_blackjack.yy",},},
-    {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"roomId":{"name":"rm_roulette","path":"rooms/rm_roulette/rm_roulette.yy",},},
   ],
   "Folders": [

@@ -7,4 +7,4 @@ global.balance = 500;
 randomize();
 
 // TODO: Add a main menu room
-room_goto(rm_blackjack);
+room_goto(casino_1);
