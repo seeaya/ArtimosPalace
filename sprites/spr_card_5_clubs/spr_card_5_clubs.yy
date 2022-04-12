@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_card_5_clubs","path":"sprites/spr_card_5_clubs/spr_card_5_clubs.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_card_5_clubs",
     "tags": [],
     "resourceType": "GMSequence",

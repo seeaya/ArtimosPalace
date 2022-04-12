@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_label_highlighted_disabled_center","path":"sprites/spr_label_highlighted_disabled_center/spr_label_highlighted_disabled_center.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_label_highlighted_disabled_center",
     "tags": [],
     "resourceType": "GMSequence",

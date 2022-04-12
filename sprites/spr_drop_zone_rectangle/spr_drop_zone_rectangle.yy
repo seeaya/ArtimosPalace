@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_drop_zone_rectangle","path":"sprites/spr_drop_zone_rectangle/spr_drop_zone_rectangle.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_drop_zone_rectangle",
     "tags": [],
     "resourceType": "GMSequence",

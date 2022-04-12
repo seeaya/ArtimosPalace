@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_label_highlighted_disabled","path":"sprites/spr_label_highlighted_disabled/spr_label_highlighted_disabled.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_label_highlighted_disabled",
     "tags": [],
     "resourceType": "GMSequence",

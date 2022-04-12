@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"spr_chip_red_unlabeled","path":"sprites/spr_chip_red_unlabeled/spr_chip_red_unlabeled.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "spr_chip_red_unlabeled",
     "tags": [],
     "resourceType": "GMSequence",
