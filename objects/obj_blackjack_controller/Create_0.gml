@@ -467,6 +467,8 @@ game_button_bottom_left = undefined;
 game_button_top_right = undefined;
 game_button_bottom_right = undefined;
 
+game_button_exit = undefined;
+
 // Note: For this to work, the creation order for this object must be after all interface items
 load_interface_vars_from_room();
 
@@ -631,6 +633,10 @@ game_button_bottom_right.action = function() {
 	default:
 		break;
 	}
+}
+
+game_button_exit.action = function() {
+	room_goto(Casino1);
 }
 
 #endregion
