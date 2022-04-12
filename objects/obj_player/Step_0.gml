@@ -28,5 +28,8 @@ if(cam_y < 0)
 	cam_y = 0;
 if(cam_y > room_height - camera_height)
 	cam_y = room_height - camera_height;
-	
+
+global.playerX = x;
+global.playerY = y;
+
 camera_set_view_pos(view_camera[1], cam_x, cam_y);
