@@ -18,3 +18,5 @@ drag_scale = function() {
 
 // Value can be set in the room to determine which sprite to draw
 sprite_index = labeled_sprite_for_chip_value(value);
+
+

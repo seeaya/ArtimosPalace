@@ -4,6 +4,6 @@
 // Inherit the parent event
 event_inherited();
 
-if(visible && keyboard_check(interact_key)) {
+if(is_visible && keyboard_check(interact_key)) {
 	room_goto(rm_blackjack);
 }
