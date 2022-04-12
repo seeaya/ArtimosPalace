@@ -9,6 +9,10 @@ drag_canceled = function() {
 }
 
 drag_scale = function() {
+	if (room == rm_roulette) {
+		return 0.5;
+	}
+	
 	return sprite_width / sprite_get_width(sprite_index);
 }
 

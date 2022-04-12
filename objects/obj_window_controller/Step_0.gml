@@ -15,3 +15,11 @@ if (keyboard_check_pressed(24)) {
 	global.resolution = supported_resolutions[| resolution_index];
 	apply_resolution();
 }
+
+if (keyboard_check(vk_shift) && keyboard_check_released(ord("R"))) {
+	room_goto(rm_roulette);
+}
+
+if (keyboard_check(vk_shift) && keyboard_check_released(ord("B"))) {
+	room_goto(rm_blackjack);
+}

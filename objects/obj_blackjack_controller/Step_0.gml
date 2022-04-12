@@ -1,33 +1,77 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-if (is_betting) {
+switch (stage) {
+case bj_game_stage_type.betting:
+	// Check for any main bets to allow for playing
+	var any_bets = list_reduce(main_drop_zones(), false, function(result, zone) {
+		return (zone.chip.value > 0) || result;
+	});
 	
-} else {
-	hand_value_label_left.text = value_label(cards_left_values());
-	hand_value_label_center.text = value_label(cards_center_values());
-	hand_value_label_right.text = value_label(cards_right_values());
-	hand_value_label_dealer.text = value_label(cards_dealer_values());
+	game_button_bottom_right.is_enabled = any_bets;
 	
-	hand_value_label_left.is_enabled = play_index == 0;
-	hand_value_label_center.is_enabled = play_index == 1;
-	hand_value_label_right.is_enabled = play_index == 2;
-	
-	var cards;
-	
-	switch (play_index) {
-	case 0:
-		cards = cards_left_values();
-		break;
-	case 1:
-		cards = cards_center_values();
-		break;
-	case 2:
-		cards = cards_right_values();
-		break;
+	// DEBUG
+	if (keyboard_check_released(ord("A"))) {
+		ds_list_add(shoe.cards, new Card(rank_type.a, suit_type.diamonds));
 	}
 	
-	game_button_top_right.is_enabled = bj_can_hit(cards);
-	game_button_top_left.is_enabled = bj_can_double_down(cards);
-	game_button_bottom_left.is_enabled = bj_can_split(cards);
+	if (keyboard_check_released(ord("2"))) {
+		ds_list_add(shoe.cards, new Card(rank_type._2, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("3"))) {
+		ds_list_add(shoe.cards, new Card(rank_type._3, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("4"))) {
+		ds_list_add(shoe.cards, new Card(rank_type._4, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("5"))) {
+		ds_list_add(shoe.cards, new Card(rank_type._5, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("6"))) {
+		ds_list_add(shoe.cards, new Card(rank_type._6, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("7"))) {
+		ds_list_add(shoe.cards, new Card(rank_type._7, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("8"))) {
+		ds_list_add(shoe.cards, new Card(rank_type._8, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("9"))) {
+		ds_list_add(shoe.cards, new Card(rank_type._9, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("J"))) {
+		ds_list_add(shoe.cards, new Card(rank_type.j, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("Q"))) {
+		ds_list_add(shoe.cards, new Card(rank_type.q, suit_type.diamonds));
+	}
+	
+	if (keyboard_check_released(ord("K"))) {
+		ds_list_add(shoe.cards, new Card(rank_type.k, suit_type.diamonds));
+	}
+	
+	// TODO: Disable side-bets if no main bet
+	break;
+case bj_game_stage_type.player_turn:
+	var hand = hands[| play_index];
+	game_button_top_right.is_enabled = hand.can_hit();
+	game_button_top_left.is_enabled = hand.can_double_down();
+	game_button_bottom_left.is_enabled = hand.can_split();
+	update_card_info();
+	break;
+case bj_game_stage_type.insurance_betting:
+	game_button_top_right.is_enabled = hands[| play_index].can_play_insurance();
+	update_card_info();
+	break;
+default:
+	break;
 }
