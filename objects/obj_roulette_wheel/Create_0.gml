@@ -2,7 +2,17 @@
 // You can write your code in this editor
 
 target_angle = 0.0;
-angular_velocity = 8.0;
+start_angle = 0.0;
+time = 0.0;
+
+start_ball_angle = 0.0;
+target_ball_angle = 0.0;
+
+ball_outside = 921;
+ball_inside = 559;
+
+ball_x = 0;
+ball_y = 0;
 
 number_to_index = arrays_to_map(
 	[k_roulette_zero, 2, 14, 35, 23, 4, 16, 33, 21, 6, 18, 31, 19, 8, 12, 29, 25, 10, 27, k_roulette_double_zero, 1, 13, 36, 24, 3, 15, 34, 22, 5, 17, 32, 20, 7, 11, 33, 26, 9, 28],
@@ -12,6 +22,10 @@ number_to_index = arrays_to_map(
 function spin(value) {
 	// TODO: Fix bug with returning undefined from map
 	var index = number_to_index[? value] ?? 0;
-	target_angle = 360 / 38 * index;
-	angular_velocity = 8.0;
+	target_angle = -(360 / 38) * index + 10 * 360;
+	time = 0.0;
+	start_angle = image_angle;
+	
+	start_ball_angle = target_ball_angle % 360;
+	target_ball_angle = -720.0;
 }

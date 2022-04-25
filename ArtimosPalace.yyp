@@ -122,6 +122,7 @@
     {"id":{"name":"rm_roulette","path":"rooms/rm_roulette/rm_roulette.yy",},"order":3,},
     {"id":{"name":"spr_card_2_spades","path":"sprites/spr_card_2_spades/spr_card_2_spades.yy",},"order":7,},
     {"id":{"name":"spr_chip_yellow","path":"sprites/spr_chip_yellow/spr_chip_yellow.yy",},"order":9,},
+    {"id":{"name":"ac_roulette","path":"animcurves/ac_roulette/ac_roulette.yy",},"order":0,},
     {"id":{"name":"spr_button_round_rect_hover_right","path":"sprites/spr_button_round_rect_hover_right/spr_button_round_rect_hover_right.yy",},"order":11,},
     {"id":{"name":"spr_table_1","path":"sprites/spr_table_1/spr_table_1.yy",},"order":0,},
     {"id":{"name":"fnt_chip","path":"fonts/fnt_chip/fnt_chip.yy",},"order":3,},

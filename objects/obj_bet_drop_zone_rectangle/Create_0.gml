@@ -2,6 +2,11 @@
 
 event_inherited();
 
+highlight_x = ds_list_create();
+highlight_y = ds_list_create();
+highlight_width = ds_list_create();
+highlight_height = ds_list_create();
+
 // Accept drop if drag item is an obj_chip_store (from dragging from store) or an obj_chip (if dragging from other bet zone)
 should_accept_drop = function(item) {
 	if (!is_enabled) {

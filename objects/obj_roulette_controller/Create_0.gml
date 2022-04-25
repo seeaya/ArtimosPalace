@@ -38,9 +38,17 @@ create_drop_zone = function(x, y, width, height) {
 	drop_zone = instance_create_layer(x, y, "Instances", obj_bet_drop_zone_rectangle);
 	drop_zone.image_xscale = width / 128;
 	drop_zone.image_yscale = height / 128;
+	
 	drop_zone.add_chip();
 	return drop_zone;
 };
+
+set_drop_zone_size = function(obj, hx, hy, hw, hh) {
+	ds_list_add(obj.highlight_x, hx);
+	ds_list_add(obj.highlight_y, hy);
+	ds_list_add(obj.highlight_width, hw);
+	ds_list_add(obj.highlight_height, hh);
+}
 
 create_drop_zones = function() {
 	var inside_x = 622;
@@ -55,10 +63,14 @@ create_drop_zones = function() {
 	var zero_width = 264 - inside_padding;
 	var zero_height = 412.5 - inside_padding;
 	
-	drop_zone_double_zero = create_drop_zone(zero_x, zero_y, zero_width, zero_height);
+	drop_zone_double_zero = create_drop_zone(zero_x, zero_y, zero_width, zero_height)
+	set_drop_zone_size(drop_zone_double_zero, zero_x, zero_y, zero_width + inside_padding, zero_height + inside_padding);
 	drop_zone_zero = create_drop_zone(zero_x, zero_y + zero_height + 2 * inside_padding, zero_width, zero_height);
+	set_drop_zone_size(drop_zone_zero, zero_x, zero_y + zero_height + inside_padding, zero_width + inside_padding, zero_height + inside_padding);
 	
 	drop_zone_zero_split = create_drop_zone(zero_x, zero_y + zero_height, zero_width, inside_padding * 2);
+	set_drop_zone_size(drop_zone_zero_split, zero_x, zero_y, zero_width + inside_padding, 2 * (zero_height + inside_padding));
+	
 	
 	// Straight ups
 	var straight_width = inside_width - 2 * inside_padding;
@@ -70,6 +82,7 @@ create_drop_zones = function() {
 			var straight_y = inside_y + col * inside_height + inside_padding;
 			
 			var drop_zone = create_drop_zone(straight_x, straight_y, straight_width, straight_height);
+			set_drop_zone_size(drop_zone, straight_x - inside_padding, straight_y - inside_padding, straight_width + 2 * inside_padding, straight_height + 2 * inside_padding);
 			ds_list_add(drop_zones_straight_ups, drop_zone);
 		}
 	}
@@ -84,6 +97,7 @@ create_drop_zones = function() {
 			var split_y = inside_y + col * inside_height + inside_padding;
 			
 			var drop_zone = create_drop_zone(split_x, split_y, corner_width, straight_height);
+			set_drop_zone_size(drop_zone, split_x + inside_padding - inside_width, split_y - inside_padding, inside_width * 2, inside_height);
 			ds_list_add(drop_zones_splits_horizontal, drop_zone);
 		}
 	}
@@ -95,6 +109,7 @@ create_drop_zones = function() {
 			var split_y = inside_y - inside_padding + col * inside_height;
 			
 			var drop_zone = create_drop_zone(split_x, split_y, straight_width, corner_height);
+			set_drop_zone_size(drop_zone, split_x - inside_padding, split_y + inside_padding - inside_height, inside_width, inside_height * 2);
 			ds_list_add(drop_zones_splits_vertical, drop_zone);
 		}
 	}
@@ -106,6 +121,7 @@ create_drop_zones = function() {
 			var corner_y = inside_y - inside_padding + col * inside_height;
 			
 			var drop_zone = create_drop_zone(corner_x, corner_y, corner_width, corner_height);
+			set_drop_zone_size(drop_zone, corner_x + inside_padding - inside_width, corner_y + inside_padding - inside_height, 2 * inside_width, 2 * inside_height);
 			ds_list_add(drop_zones_corners, drop_zone);
 		}
 	}
@@ -117,6 +133,7 @@ create_drop_zones = function() {
 		var street_x = inside_x + row * inside_width + inside_padding;
 		
 		var drop_zone = create_drop_zone(street_x, street_y, straight_width, corner_height);
+		set_drop_zone_size(drop_zone, street_x - inside_padding, inside_y, inside_width, inside_height * 3);
 		ds_list_add(drop_zones_streets, drop_zone);
 	}
 	
@@ -125,6 +142,7 @@ create_drop_zones = function() {
 		var street_x = inside_x - inside_padding + row * inside_width;
 		
 		var drop_zone = create_drop_zone(street_x, street_y, corner_width, corner_height);
+		set_drop_zone_size(drop_zone, street_x + inside_padding - inside_width, inside_y, inside_width * 2, inside_height * 3);
 		ds_list_add(drop_zones_double_streets, drop_zone);
 	}
 	
@@ -132,11 +150,14 @@ create_drop_zones = function() {
 	var five_number_x = inside_x - inside_padding;
 	var five_number_y = inside_y + 3 * inside_height - inside_padding;
 	drop_zone_five_number = create_drop_zone(five_number_x, five_number_y, corner_width, corner_height);
+	set_drop_zone_size(drop_zone_five_number, zero_x, zero_y, zero_width + inside_padding + inside_width, inside_height * 3);
 	
 	// Three number bet
 	var three_number_x = five_number_x;
 	var three_number_y = inside_y + 1.5 * inside_height - inside_padding;
 	drop_zone_three_number = create_drop_zone(three_number_x, three_number_y, corner_width, corner_height);
+	set_drop_zone_size(drop_zone_three_number, zero_x, zero_y, zero_width + inside_padding, 2 * (zero_height + inside_padding));
+	set_drop_zone_size(drop_zone_three_number, inside_x, inside_y + inside_height, inside_width, inside_height);
 	
 	// Dozens
 	var dozen_y = inside_y + 3 * inside_height + inside_padding;
@@ -147,6 +168,7 @@ create_drop_zones = function() {
 		var dozen_x = inside_x + i * 4 * inside_width;
 		
 		var drop_zone = create_drop_zone(dozen_x, dozen_y, dozen_width, dozen_height);
+		set_drop_zone_size(drop_zone, dozen_x, dozen_y - inside_padding, dozen_width, dozen_height + inside_padding);
 		ds_list_add(drop_zones_dozens, drop_zone);
 	}
 	
@@ -364,7 +386,7 @@ begin_spin = function() {
 	wheel.visible = true;
 	wheel.spin(winning_number);
 	
-	alarm[0] = 5 * room_speed;
+	alarm[0] = 12 * room_speed;
 }
 
 begin_payout = function() {
