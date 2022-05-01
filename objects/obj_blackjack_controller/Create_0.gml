@@ -636,7 +636,7 @@ game_button_bottom_right.action = function() {
 }
 
 game_button_exit.action = function() {
-	room_goto(casino_1);
+	room_goto(rm_main_menu);
 }
 
 #endregion

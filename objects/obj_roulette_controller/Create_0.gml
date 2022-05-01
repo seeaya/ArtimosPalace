@@ -562,6 +562,7 @@ game_button_top_left = undefined;
 game_button_bottom_left = undefined;
 game_button_top_right = undefined;
 game_button_bottom_right = undefined;
+game_button_exit = undefined;
 
 last_number_label = undefined;
 
@@ -604,6 +605,10 @@ game_button_top_right.action = function() {
 
 game_button_bottom_right.action = function() {
 	spin_action();
+}
+
+game_button_exit.action = function() {
+	room_goto(rm_main_menu);
 }
 
 #endregion

@@ -6,5 +6,4 @@ global.balance = 500;
 
 randomize();
 
-// TODO: Add a main menu room
-room_goto(casino_1);
+room_goto(rm_main_menu);
