@@ -308,6 +308,15 @@ lose_chip = function(chip) {
 	}
 }
 
+show_fading_label = function(x, y, text, color) {
+	label = instance_create_depth(x, y, 0, obj_fading_label);
+	label.text = text;
+	label.color = color;
+}
+
+win_color = make_color_rgb(0, 255, 0);
+lose_color = make_color_rgb(255, 45, 0);
+
 payout_chip = function(zone, multiplier) {
 	var chip = zone.chip;
 	
@@ -319,12 +328,21 @@ payout_chip = function(zone, multiplier) {
 	
 	if (multiplier == -1) {
 		lose_chip(chip);
+		if (chip.value > 0) {
+			show_fading_label(chip.x, chip.y, "$" + string(chip.value), lose_color);
+		}
 	} else if (multiplier == 0) {
 		push_chip(chip);
+		if (chip.value > 0) {
+			show_fading_label(chip.x, chip.y, "Push", c_white);
+		}
 	} else {
 		var win_amount = multiplier * chip.value;
 		push_chip(chip);
 		win_chip(win_amount, chip.x);
+		if (chip.value > 0) {
+			show_fading_label(chip.x, chip.y, "$" + string(chip.value * multiplier), win_color);
+		}
 	}
 	
 	global.balance += chip.value * (multiplier + 1)
@@ -346,6 +364,8 @@ begin_betting = function() {
 	
 	wheel.visible = false;
 	
+	game_button_exit.is_enabled = true;
+	
 	game_button_top_left.text = "Repeat";
 	game_button_bottom_left.text = "Double";
 	game_button_top_right.text = "Clear";
@@ -366,6 +386,7 @@ begin_betting = function() {
 
 begin_spin = function() {
 	stage = roulette_game_stage_type.wheel_spinning;
+	game_button_exit.is_enabled = false;
 	
 	game_button_top_left.is_enabled = false;
 	game_button_bottom_left.is_enabled = false;

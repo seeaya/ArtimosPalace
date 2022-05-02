@@ -222,7 +222,7 @@ function bj_la_is_one_diamond(cards) {
 
 function bj_la_is_one(cards) {
 	var aces = list_filter(cards, function(card) {
-		return card.suit == card.rank == rank_type.a;
+		return card.rank == rank_type.a;
 	});
 	
 	if (ds_list_size(aces) == 1) {

@@ -10,55 +10,6 @@ case bj_game_stage_type.betting:
 	
 	game_button_bottom_right.is_enabled = any_bets;
 	
-	// DEBUG
-	if (keyboard_check_released(ord("A"))) {
-		ds_list_add(shoe.cards, new Card(rank_type.a, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("2"))) {
-		ds_list_add(shoe.cards, new Card(rank_type._2, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("3"))) {
-		ds_list_add(shoe.cards, new Card(rank_type._3, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("4"))) {
-		ds_list_add(shoe.cards, new Card(rank_type._4, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("5"))) {
-		ds_list_add(shoe.cards, new Card(rank_type._5, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("6"))) {
-		ds_list_add(shoe.cards, new Card(rank_type._6, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("7"))) {
-		ds_list_add(shoe.cards, new Card(rank_type._7, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("8"))) {
-		ds_list_add(shoe.cards, new Card(rank_type._8, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("9"))) {
-		ds_list_add(shoe.cards, new Card(rank_type._9, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("J"))) {
-		ds_list_add(shoe.cards, new Card(rank_type.j, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("Q"))) {
-		ds_list_add(shoe.cards, new Card(rank_type.q, suit_type.diamonds));
-	}
-	
-	if (keyboard_check_released(ord("K"))) {
-		ds_list_add(shoe.cards, new Card(rank_type.k, suit_type.diamonds));
-	}
-	
 	// TODO: Disable side-bets if no main bet
 	break;
 case bj_game_stage_type.player_turn:

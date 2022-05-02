@@ -25,6 +25,30 @@ chips_player_location_y = room_height + sprite_get_height(spr_chip_white) / 2;
 chips_dealer_location_x = room_width / 2;
 chips_dealer_location_y = -sprite_get_height(spr_chip_white) / 2;
 
+amounts_last_bet = ds_list_create();
+total_amount_last_bet = 0;
+
+save_last_bet = function() {
+	ds_list_destroy(amounts_last_bet);
+	amounts_last_bet = ds_list_create();
+	for (var i = 0; i < ds_list_size(drop_zones_all()); ++i) {
+		ds_list_add(amounts_last_bet, drop_zones_all()[| i].chip.value);
+	}
+	
+	total_amount_last_bet = list_reduce(amounts_last_bet, 0, function(result, value) {
+		return result + value;
+	});
+}
+
+show_fading_label = function(x, y, text, color) {
+	label = instance_create_depth(x, y, 0, obj_fading_label);
+	label.text = text;
+	label.color = color;
+}
+
+win_color = make_color_rgb(0, 255, 0);
+lose_color = make_color_rgb(255, 45, 0);
+
 push_chip = function(chip) {
 	var path = path_add();
 	path_add_point(path, chip.x, chip.y, 1);
@@ -69,12 +93,21 @@ lose_chip = function(chip) {
 payout_chip = function(chip, multiplier) {
 	if (multiplier == -1) {
 		lose_chip(chip);
+		if (chip.value > 0) {
+			show_fading_label(chip.x, chip.y, "$" + string(chip.value), lose_color);
+		}
 	} else if (multiplier == 0) {
 		push_chip(chip);
+		if (chip.value > 0) {
+			show_fading_label(chip.x, chip.y, "Push", c_white);
+		}
 	} else {
 		var win_amount = multiplier * chip.value;
 		push_chip(chip);
 		win_chip(win_amount, chip.x);
+		if (chip.value > 0) {
+			show_fading_label(chip.x, chip.y, "$" + string(chip.value *  multiplier), win_color);
+		}
 	}
 	
 	global.balance += chip.value * (multiplier + 1)
@@ -93,8 +126,10 @@ begin_betting = function() {
 	game_button_top_right.text = "";
 	game_button_bottom_right.text = "Play";
 	
-	game_button_top_left.is_enabled = true;
-	game_button_bottom_left.is_enabled = true;
+	game_button_exit.is_enabled = true;
+	
+	game_button_top_left.is_enabled = global.balance >= total_amount_last_bet;
+	game_button_bottom_left.is_enabled = global.balance >= 2 * total_amount_last_bet;
 	game_button_top_right.is_enabled = false;
 	game_button_bottom_right.is_enabled = true;
 	
@@ -131,6 +166,19 @@ begin_betting = function() {
 }
 
 game_begin = function() {
+	save_last_bet();
+	
+	game_button_exit.is_enabled = false;
+	game_button_top_left.is_enabled = false;
+	game_button_bottom_left.is_enabled = false;
+	game_button_top_right.is_enabled = false;
+	game_button_bottom_right.is_enabled = false;
+	
+	game_button_top_left.text = "";
+	game_button_bottom_left.text = "";
+	game_button_top_right.text = "";
+	game_button_bottom_right.text = "";
+	
 	main_drop_zone_left.is_enabled = false;
 	main_drop_zone_center.is_enabled = false;
 	main_drop_zone_right.is_enabled = false;
@@ -488,6 +536,15 @@ plus_three_drop_zones = function() {
 	return array_to_list([plus_three_drop_zone_left, plus_three_drop_zone_center, plus_three_drop_zone_right]);
 }
 
+drop_zones_all = function() {
+	var list = ds_list_create();
+	list_append_list(list, main_drop_zones());
+	list_append_list(list, lucky_aces_drop_zones());
+	list_append_list(list, plus_three_drop_zones());
+	
+	return list;
+}
+
 #endregion
 
 #region Hand helpers
@@ -535,7 +592,11 @@ game_action_stand = function() {
 }
 
 game_action_repeat_bet = function() {
-	// TODO: Implement
+	for (var i = 0; i < ds_list_size(drop_zones_all()); ++i) {
+		global.balance += drop_zones_all()[| i].chip.value;
+		drop_zones_all()[| i].chip.value = amounts_last_bet[| i];
+		global.balance -= amounts_last_bet[| i];
+	}
 }
 
 game_action_double_down = function() {
@@ -543,7 +604,11 @@ game_action_double_down = function() {
 }
 
 game_action_double_bet = function() {
-	// TODO: Implement
+	for (var i = 0; i < ds_list_size(drop_zones_all()); ++i) {
+		global.balance += drop_zones_all()[| i].chip.value;
+		drop_zones_all()[| i].chip.value = 2 * amounts_last_bet[| i];
+		global.balance -= 2 * amounts_last_bet[| i];
+	}
 }
 
 game_action_split = function() {
@@ -641,4 +706,5 @@ game_button_exit.action = function() {
 
 #endregion
 
+save_last_bet();
 begin_betting();
