@@ -13,13 +13,13 @@ if (obj_roulette_controller.stage == roulette_game_stage_type.wheel_spinning) {
 	image_angle = start_angle + angle_wheel * (target_angle - start_angle);
 	image_angle %= 360;
 	
-	var ball_angle = start_ball_angle + angle_ball * (target_ball_angle - start_ball_angle);
+	var ball_angle = image_angle + start_ball_angle + angle_ball * (target_ball_angle - start_ball_angle);
 	ball_angle %= 360;
 	
 	var ball_radius = ball_outside + radius_ball * (ball_inside - ball_outside);
 	
 	ball_x = cos(degtorad(ball_angle)) * ball_radius;
-	ball_y = sin(degtorad(ball_angle)) * ball_radius;
+	ball_y = -sin(degtorad(ball_angle)) * ball_radius;
 	
 	time += 1 / room_speed;
 }
