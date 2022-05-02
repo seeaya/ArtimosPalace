@@ -127,6 +127,7 @@ begin_betting = function() {
 	game_button_bottom_right.text = "Play";
 	
 	game_button_exit.is_enabled = true;
+	game_button_help.is_enabled = true;
 	
 	game_button_top_left.is_enabled = global.balance >= total_amount_last_bet;
 	game_button_bottom_left.is_enabled = global.balance >= 2 * total_amount_last_bet;
@@ -169,6 +170,7 @@ game_begin = function() {
 	save_last_bet();
 	
 	game_button_exit.is_enabled = false;
+	game_button_help.is_enabled = false;
 	game_button_top_left.is_enabled = false;
 	game_button_bottom_left.is_enabled = false;
 	game_button_top_right.is_enabled = false;
@@ -516,6 +518,7 @@ game_button_top_right = undefined;
 game_button_bottom_right = undefined;
 
 game_button_exit = undefined;
+game_button_help = undefined;
 
 // Note: For this to work, the creation order for this object must be after all interface items
 load_interface_vars_from_room();
@@ -701,7 +704,19 @@ game_button_bottom_right.action = function() {
 }
 
 game_button_exit.action = function() {
+	list_for_each(drop_zones_all(), function(zone) {
+		global.balance += zone.chip.value;
+	})
+	
 	room_goto(rm_main_menu);
+}
+
+game_button_help.action = function() {
+	list_for_each(drop_zones_all(), function(zone) {
+		global.balance += zone.chip.value;
+	})
+	
+	room_goto(rm_blackjack_help);
 }
 
 #endregion
