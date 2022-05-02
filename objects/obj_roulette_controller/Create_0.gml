@@ -252,6 +252,21 @@ chips_player_location_y = room_height + sprite_get_height(spr_chip_white) / 2;
 chips_dealer_location_x = room_width / 2;
 chips_dealer_location_y = -sprite_get_height(spr_chip_white) / 2;
 
+amounts_last_bet = ds_list_create();
+total_amount_last_bet = 0;
+
+save_last_bet = function() {
+	ds_list_destroy(amounts_last_bet);
+	amounts_last_bet = ds_list_create();
+	for (var i = 0; i < ds_list_size(drop_zones_all); ++i) {
+		ds_list_add(amounts_last_bet, drop_zones_all[| i].chip.value);
+	}
+	
+	total_amount_last_bet = list_reduce(amounts_last_bet, 0, function(result, value) {
+		return result + value;
+	});
+}
+
 push_chip = function(chip) {
 	var path = path_add();
 	path_add_point(path, chip.x, chip.y, 1);
@@ -336,8 +351,8 @@ begin_betting = function() {
 	game_button_top_right.text = "Clear";
 	game_button_bottom_right.text = "Spin";
 	
-	game_button_top_left.is_enabled = true;
-	game_button_bottom_left.is_enabled = true;
+	game_button_top_left.is_enabled = total_amount_last_bet <= global.balance;
+	game_button_bottom_left.is_enabled = total_amount_last_bet * 2 <= global.balance;
 	game_button_top_right.is_enabled = true;
 	game_button_bottom_right.is_enabled = true;
 	
@@ -572,15 +587,24 @@ load_interface_vars_from_room();
 #region Button actions
 
 spin_action = function() {
+	save_last_bet();
 	begin_spin();
 }
 
 double_bet_action = function() {
-	
+	for (var i = 0; i < ds_list_size(drop_zones_all); ++i) {
+		global.balance += drop_zones_all[| i].chip.value;
+		drop_zones_all[| i].chip.value = 2 * amounts_last_bet[| i];
+		global.balance -= 2 * amounts_last_bet[| i];
+	}
 }
 
 repeat_bet_action = function() {
-	
+	for (var i = 0; i < ds_list_size(drop_zones_all); ++i) {
+		global.balance += drop_zones_all[| i].chip.value;
+		drop_zones_all[| i].chip.value = amounts_last_bet[| i];
+		global.balance -= amounts_last_bet[| i];
+	}
 }
 
 clear_bets_action = function() {
@@ -614,4 +638,5 @@ game_button_exit.action = function() {
 #endregion
 
 create_drop_zones();
+save_last_bet();
 begin_betting();
